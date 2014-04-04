@@ -19,6 +19,10 @@
 		E25BE96A18E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
 		E25BE97218E8D8D400276890 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E25BE97018E8D8D400276890 /* InfoPlist.strings */; };
 		E25BE97418E8D8D400276890 /* com_busiestb_busybTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97318E8D8D400276890 /* com_busiestb_busybTests.m */; };
+		E25BE97F18E8D97C00276890 /* BBHiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97E18E8D97C00276890 /* BBHiveViewController.m */; };
+		E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98118E8DA2C00276890 /* BBHiveLayout.m */; };
+		E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98418E8DAF000276890 /* BBHiveCell.m */; };
+		E25BE98A18E9367A00276890 /* BBHexagon.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98918E9367A00276890 /* BBHexagon.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,14 @@
 		E25BE96F18E8D8D400276890 /* com.busiestb.busybTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.busiestb.busybTests-Info.plist"; sourceTree = "<group>"; };
 		E25BE97118E8D8D400276890 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E25BE97318E8D8D400276890 /* com_busiestb_busybTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = com_busiestb_busybTests.m; sourceTree = "<group>"; };
+		E25BE97D18E8D97C00276890 /* BBHiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveViewController.h; sourceTree = "<group>"; };
+		E25BE97E18E8D97C00276890 /* BBHiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHiveViewController.m; sourceTree = "<group>"; };
+		E25BE98018E8DA2C00276890 /* BBHiveLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveLayout.h; sourceTree = "<group>"; };
+		E25BE98118E8DA2C00276890 /* BBHiveLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHiveLayout.m; sourceTree = "<group>"; };
+		E25BE98318E8DAF000276890 /* BBHiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveCell.h; sourceTree = "<group>"; };
+		E25BE98418E8DAF000276890 /* BBHiveCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHiveCell.m; sourceTree = "<group>"; };
+		E25BE98818E9367A00276890 /* BBHexagon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHexagon.h; sourceTree = "<group>"; };
+		E25BE98918E9367A00276890 /* BBHexagon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHexagon.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,8 +121,16 @@
 			children = (
 				E25BE95D18E8D8D400276890 /* BBAppDelegate.h */,
 				E25BE95E18E8D8D400276890 /* BBAppDelegate.m */,
+				E25BE98818E9367A00276890 /* BBHexagon.h */,
+				E25BE98918E9367A00276890 /* BBHexagon.m */,
 				E25BE96018E8D8D400276890 /* Images.xcassets */,
 				E25BE95518E8D8D400276890 /* Supporting Files */,
+				E25BE97D18E8D97C00276890 /* BBHiveViewController.h */,
+				E25BE97E18E8D97C00276890 /* BBHiveViewController.m */,
+				E25BE98018E8DA2C00276890 /* BBHiveLayout.h */,
+				E25BE98118E8DA2C00276890 /* BBHiveLayout.m */,
+				E25BE98318E8DAF000276890 /* BBHiveCell.h */,
+				E25BE98418E8DAF000276890 /* BBHiveCell.m */,
 			);
 			path = com.busiestb.busyb;
 			sourceTree = "<group>";
@@ -240,6 +260,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E25BE98A18E9367A00276890 /* BBHexagon.m in Sources */,
+				E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */,
+				E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */,
+				E25BE97F18E8D97C00276890 /* BBHiveViewController.m in Sources */,
 				E25BE95F18E8D8D400276890 /* BBAppDelegate.m in Sources */,
 				E25BE95B18E8D8D400276890 /* main.m in Sources */,
 			);
@@ -440,6 +464,7 @@
 				E25BE97918E8D8D400276890 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E25BE97A18E8D8D400276890 /* Build configuration list for PBXNativeTarget "com.busiestb.busybTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +473,7 @@
 				E25BE97C18E8D8D400276890 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
