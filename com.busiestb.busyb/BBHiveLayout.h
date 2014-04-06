@@ -21,4 +21,6 @@
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
                       activeCell:(NSIndexPath *)activeCellIndexPath;
 
+- (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords;
+
 @end

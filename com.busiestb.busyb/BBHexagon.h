@@ -9,18 +9,34 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+  kBBHexagonColorBlack,
+  kBBHexagonColorBlue,
+  kBBHexagonColorGreen,
+  kBBHexagonColorLavender,
+  kBBHexagonColorMint,
+  kBBHexagonColorOrange,
+  kBBHexagonColorPink,
+  kBBHexagonColorPurp,
+  kBBHexagonColorSalmon,
+  kBBHexagonColorTeal,
+  kBBHexagonColorNumColors,
+} BBHexagonColor;
+
+typedef enum {
+  kBBHexagonTypeEmpty,
   kBBHexagonTypeCell,
   kBBHexagonTypeCenter,
 } BBHexagonType;
 
 @interface BBHexagon : NSObject
 
-@property(nonatomic, assign) CGPoint hexCoords;
-@property(nonatomic, assign) BBHexagonType type;
-@property(nonatomic, strong) BBHexagon *parent;
+@property(nonatomic, readonly) CGPoint hexCoords;
+@property(nonatomic, readonly) BBHexagonType type;
+@property(nonatomic, readonly) BBHexagonColor color;
 
-+ (BBHexagon *)cellHexagonWithParent:(BBHexagon *)parent
-                           hexCoords:(CGPoint)hexCoords;
++ (BBHexagon *)emptyCellHexagon;
++ (BBHexagon *)cellHexagonWithHexCoords:(CGPoint)hexCoords color:(BBHexagonColor)color;
 + (BBHexagon *)centerHexagon;
++ (BBHexagonColor)randomHexagonColor;
 
 @end

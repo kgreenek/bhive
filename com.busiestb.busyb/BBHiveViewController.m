@@ -23,13 +23,15 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   NSMutableArray *_sections;
   UICollectionView *_hiveCollectionView;
   NSIndexPath *_activeCell;
-  UITapGestureRecognizer *_backgroundTapRecognizer;
+  BBHexagon *_centerHexagon;
+  BBHiveCell *_panningCell;
+  BBHiveLayout *_hiveLayout;
 }
 
 - (void)loadView {
-  BBHiveLayout *layout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:nil];
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:nil];
   _hiveCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero
-                                           collectionViewLayout:layout];
+                                           collectionViewLayout:_hiveLayout];
   _hiveCollectionView.scrollEnabled = NO;
   _hiveCollectionView.dataSource = self;
   _hiveCollectionView.delegate = self;
@@ -45,26 +47,8 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 - (void)viewDidLoad {
   [super viewDidLoad];
   NSMutableArray *cells = [NSMutableArray array];
-  BBHexagon *centerHexagon = [BBHexagon centerHexagon];
-  [cells addObject:centerHexagon];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(0, 1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(0, -1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(0, -2)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(1, 0)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(1, 1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-1, 0)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-1, -1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-1, 1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-2, 0)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-2, -1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-2, 1)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-3, 2)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-3, 3)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-3, 4)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(0, 2)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(1, 2)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(-1, 2)]];
-  [cells addObject:[BBHexagon cellHexagonWithParent:centerHexagon hexCoords:CGPointMake(4, -4)]];
+  _centerHexagon = [BBHexagon centerHexagon];
+  [cells addObject:_centerHexagon];
   _sections = [NSMutableArray array];
   [_sections addObject:cells];
   [_hiveCollectionView reloadData];
@@ -86,7 +70,9 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   BBHiveCell *cell =
       [_hiveCollectionView dequeueReusableCellWithReuseIdentifier:kHiveCellIdentifier
                                                      forIndexPath:indexPath];
-  [cell setHexagon:[self hexagonForIndexPath:indexPath]];
+  cell.hexagon = [self hexagonForIndexPath:indexPath];
+  [cell addGestureRecognizer:
+      [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanHexagon:)]];
   [cell sizeToFit];
   return cell;
 }
@@ -97,7 +83,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
   if ([_activeCell isEqual:indexPath]) {
     [self setActiveCell:nil];
-  } else {
+  } else if (indexPath.item != 0) {
     [self setActiveCell:indexPath];
   }
 }
@@ -116,8 +102,71 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)setActiveCell:(NSIndexPath *)activeCell {
   _activeCell = activeCell;
-  BBHiveLayout *expandedLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:activeCell];
-  [_hiveCollectionView setCollectionViewLayout:expandedLayout animated:YES];
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:activeCell];
+  [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
+}
+
+- (void)didPanHexagon:(UIPanGestureRecognizer *)recognizer {
+  if (_activeCell) {
+    return;
+  }
+  CGPoint location = [recognizer locationInView:recognizer.view.superview];
+  if (recognizer.state == UIGestureRecognizerStateEnded) {
+    [_panningCell removeFromSuperview];
+    CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
+    BBHexagon *hexagon;
+    if ([self hexagonAtHexCoords:hexCoords] != nil) {
+      if (_panningCell.hexagon.type == kBBHexagonTypeEmpty) {
+        return;
+      }
+      hexagon = _panningCell.hexagon;
+    } else {
+      hexagon = [BBHexagon cellHexagonWithHexCoords:hexCoords color:_panningCell.hexagon.color];
+    }
+    [_sections[0] addObject:hexagon];
+    [UIView animateWithDuration:0 animations:^{
+      [_hiveCollectionView performBatchUpdates:^{
+        [_hiveCollectionView insertItemsAtIndexPaths:
+            @[ [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0] ]];
+      } completion:nil];
+    }];
+    _panningCell = nil;
+    return;
+  }
+  if (recognizer.state == UIGestureRecognizerStateBegan) {
+    if (_panningCell) {
+      // This really should never be able to happen.
+      return;
+    }
+    _panningCell = [[BBHiveCell alloc] init];
+    BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
+    if (hexagon.type == kBBHexagonTypeCell) {
+      NSUInteger item = [_sections[0] indexOfObject:hexagon];
+      [_sections[0] removeObject:hexagon];
+      [UIView animateWithDuration:0 animations:^{
+        [_hiveCollectionView performBatchUpdates:^{
+          [_hiveCollectionView deleteItemsAtIndexPaths:
+              @[ [NSIndexPath indexPathForItem:item inSection:0] ]];
+        } completion:nil];
+      }];
+      _panningCell.hexagon = hexagon;
+    } else {
+      _panningCell.hexagon = [BBHexagon emptyCellHexagon];
+    }
+    [_panningCell sizeToFit];
+    [_hiveCollectionView addSubview:_panningCell];
+  }
+  _panningCell.center = location;
+}
+
+- (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {
+  // TODO: Optimize this. Blech.
+  for (BBHexagon *hexagon in _sections[0]) {
+    if (hexagon.hexCoords.x == hexCoords.x && hexagon.hexCoords.y == hexCoords.y) {
+      return hexagon;
+    }
+  }
+  return nil;
 }
 
 @end

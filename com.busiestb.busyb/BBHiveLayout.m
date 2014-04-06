@@ -38,6 +38,14 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   return self;
 }
 
+- (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords {
+  screenCoords.x -= self.collectionView.frame.size.width / 2;
+  screenCoords.y -= self.collectionView.frame.size.height / 2;
+  CGFloat y = roundf(screenCoords.y / (kHexagonHeight - kHexagonPointHeight + _hexagonPadding));
+  CGFloat x = roundf(screenCoords.x / (kHexagonWidth + _hexagonPadding) - y / 2);
+  return CGPointMake(x, y);
+}
+
 #pragma mark Overriden Methods
 
 - (void)prepareLayout {
@@ -82,7 +90,7 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   }
   // We would expect to just return contentSize here, but if the contentSize is smaller than the
   // collectionView's frame, the contentOffset gets borked by an Apple bug. As a workaround,
-  //  always make sure the returned contentSize is at least as big as the collectionView frame.
+  // always make sure the returned contentSize is at least as big as the collectionView frame.
   CGSize contentSize = CGSizeMake(maxX - minX, maxY - minY);
   CGRect collectionViewFrame = self.collectionView.frame;
   return CGSizeMake(fmaxf(contentSize.width, CGRectGetWidth(collectionViewFrame)),

@@ -12,6 +12,6 @@
 
 @interface BBHiveCell : UICollectionViewCell
 
-- (void)setHexagon:(BBHexagon *)hexagon;
+@property(nonatomic, strong) BBHexagon *hexagon;
 
 @end

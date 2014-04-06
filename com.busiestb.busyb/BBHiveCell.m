@@ -42,18 +42,18 @@ static const CGFloat kHexagonHeight = 55;
 }
 
 - (void)setHexagon:(BBHexagon *)hexagon {
+  _hexagon = hexagon;
   if (hexagon.type == kBBHexagonTypeCenter) {
     self.backgroundView = [self centerHexagonImageView];
   } else {
-    self.backgroundView = [self hexagonImageViewWithRandomColor];
+    self.backgroundView = [self hexagonImageViewWithColor:hexagon.color];
   }
 }
 
 #pragma mark Private Methods
 
-- (UIImageView *)hexagonImageViewWithRandomColor {
-  int r = arc4random() % 11;
-  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:_colorNames[r]]];
+- (UIImageView *)hexagonImageViewWithColor:(BBHexagonColor)color {
+  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:_colorNames[color]]];
 }
 
 - (UIImageView *)centerHexagonImageView {
