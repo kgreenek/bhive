@@ -170,8 +170,9 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   BBHexagon *hexagon;
   CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
   BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
-  if ([self hexagonAtHexCoords:hexCoords] != nil || offscreen) {
-    if (_panningCellIsNew) {
+  BBHexagon *overlappingHexagon = [self hexagonAtHexCoords:hexCoords];
+  if (overlappingHexagon != nil || offscreen) {
+    if (_panningCellIsNew || overlappingHexagon.type == kBBHexagonTypeCenter) {
       // Animate the cell back to the center to communicate that it couldn't be created.
       [UIView animateWithDuration:0.15
           animations:^{
