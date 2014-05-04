@@ -25,6 +25,7 @@
 @property(nonatomic, assign, getter=isActive) BOOL active;
 @property(nonatomic, assign, getter=isEditing) BOOL editing;
 @property(nonatomic, readonly) NSString *editBoxText;
+@property(nonatomic, assign, getter=isTrashHidden) BOOL trashHidden;
 
 - (void)addDidPanTarget:(id)target action:(SEL)action;
 - (void)addDidLongPressTarget:(id)target action:(SEL)action;

@@ -19,6 +19,7 @@ static const CGFloat kHexagonHeight = 55;
   UITextView *_editBox;
   UIView *_editBoxBackground;
   UILabel *_textLabel;
+  UIImageView *_trashView;
   UIPanGestureRecognizer *_panRecognizer;
   UILongPressGestureRecognizer *_longPressRecognizer;
 }
@@ -27,6 +28,7 @@ static const CGFloat kHexagonHeight = 55;
   self = [super initWithFrame:frame];
   if (self) {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    _trashHidden = YES;
     _editBoxBackground = [[UIView alloc] init];
     _editBoxBackground.layer.cornerRadius = 8;
     _editBoxBackground.backgroundColor =
@@ -49,6 +51,10 @@ static const CGFloat kHexagonHeight = 55;
     _textLabel.numberOfLines = 4;
     _textLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:_textLabel];
+
+    _trashView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"center-trash"]];
+    _trashView.hidden = _trashHidden;
+    [self addSubview:_trashView];
 
     _panRecognizer = [[UIPanGestureRecognizer alloc] init];
     _panRecognizer.maximumNumberOfTouches = 1;
@@ -80,6 +86,7 @@ static const CGFloat kHexagonHeight = 55;
                                 (self.bounds.size.height  - size.height) / 2,
                                 size.width,
                                 size.height);
+  _trashView.frame = self.bounds;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -121,6 +128,13 @@ static const CGFloat kHexagonHeight = 55;
 - (NSString *)editBoxText {
   return _editBox.text;
 }
+
+- (void)setTrashHidden:(BOOL)trashHidden {
+  _trashHidden = trashHidden;
+  _trashView.hidden = _trashHidden;
+}
+
+#pragma mark Overridden Methods
 
 - (void)prepareForReuse {
   [_panRecognizer removeTarget:nil action:NULL];

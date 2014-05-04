@@ -205,6 +205,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   CGSize size = [_panningCell sizeThatFits:CGSizeZero];
   _panningCell.frame = CGRectMake(0, 0, size.width * 1.5, size.height * 1.5);
   [_hiveCollectionView addSubview:_panningCell];
+  [self centerHiveCell].trashHidden = NO;
 }
 
 - (void)panningDidEndWithRecognizer:(UIPanGestureRecognizer *)recognizer {
@@ -230,6 +231,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
           completion:^(BOOL finished) {
             [_panningCell removeFromSuperview];
             _panningCell = nil;
+            [self centerHiveCell].trashHidden = YES;
           }];
       return;
     }
@@ -247,6 +249,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       animations:^{
         [_hiveCollectionView insertItemsAtIndexPaths:@[ indexPath ]];
       }];
+  [self centerHiveCell].trashHidden = YES;
 }
 
 - (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {
@@ -257,6 +260,11 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     }
   }
   return nil;
+}
+
+- (BBHiveCell *)centerHiveCell {
+  return (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:
+      [NSIndexPath indexPathForItem:0 inSection:0]];
 }
 
 @end
