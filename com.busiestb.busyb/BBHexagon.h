@@ -27,9 +27,11 @@ typedef enum {
 @property(nonatomic, readonly) CGPoint hexCoords;
 @property(nonatomic, readonly) BBHexagonType type;
 @property(nonatomic, readonly) BBHexagonColor color;
+@property(nonatomic, readonly) NSString *text;
 
 + (BBHexagon *)cellHexagon;
 + (BBHexagon *)centerHexagon;
 + (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords;
++ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withText:(NSString *)text;
 
 @end

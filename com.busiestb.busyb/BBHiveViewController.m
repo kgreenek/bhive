@@ -16,7 +16,8 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 @interface BBHiveViewController ()<UICollectionViewDataSource,
                                    UICollectionViewDelegate,
-                                   BBHiveLayoutDelegate>
+                                   BBHiveLayoutDelegate,
+                                   BBHiveCellDelegate>
 @end
 
 @implementation BBHiveViewController {
@@ -70,10 +71,9 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       [_hiveCollectionView dequeueReusableCellWithReuseIdentifier:kHiveCellIdentifier
                                                      forIndexPath:indexPath];
   cell.hexagon = [self hexagonForIndexPath:indexPath];
-  UIPanGestureRecognizer *recognizer =
-      [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanHexagon:)];
-  recognizer.maximumNumberOfTouches = 1;
-  [cell addGestureRecognizer:recognizer];
+  [cell addDidPanTarget:self action:@selector(didPanHexagon:)];
+  [cell addDidLongPressTarget:self action:@selector(didLongPressHexagon:)];
+  cell.delegate = self;
   [cell sizeToFit];
   return cell;
 }
@@ -88,7 +88,13 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     return;
   }
   if ([_activeCellPath isEqual:indexPath] || indexPath.item == 0) {
-    [self setActiveCellPath:nil];
+    BBHiveCell *activeCell =
+        (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
+    if (activeCell.editing) {
+      activeCell.editing = NO;
+    } else {
+      [self setActiveCellPath:nil];
+    }
   } else if (indexPath.item != 0) {
     [self setActiveCellPath:indexPath];
   }
@@ -98,6 +104,16 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (CGPoint)hexCoordinatesForItemAtIndexPath:(NSIndexPath *)indexPath {
   return [self hexagonForIndexPath:indexPath].hexCoords;
+}
+
+#pragma mark BBHiveCellDelegate
+
+- (void)didFinishEditingCell:(BBHiveCell *)cell {
+  NSUInteger index = [_sections[0] indexOfObject:cell.hexagon];
+  BBHexagon *hexagon = [BBHexagon hexagonfromHexagon:cell.hexagon
+                                            withText:cell.editBoxText];
+  _sections[0][index] = hexagon;
+  cell.hexagon = hexagon;
 }
 
 #pragma mark Private Methods
@@ -112,6 +128,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   }
   BBHiveCell *previousActiveCell =
       (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
+  previousActiveCell.editing = NO;
   _activeCellPath = activeCellPath;
   _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCellPath:activeCellPath];
   BBHiveCell *activeCell =
@@ -123,6 +140,14 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
         // Wait to make the cell active so the animations don't interfere.
         activeCell.active = YES;
       }];
+}
+
+- (void)didLongPressHexagon:(UILongPressGestureRecognizer *)recognizer {
+  BBHiveCell *cell = (BBHiveCell *)recognizer.view;
+  NSUInteger item = [_sections[0] indexOfObject:cell.hexagon];
+  if (item == _activeCellPath.item) {
+    cell.editing = YES;
+  }
 }
 
 - (void)didPanHexagon:(UIPanGestureRecognizer *)recognizer {
@@ -201,12 +226,12 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   [_panningCell removeFromSuperview];
   _panningCell = nil;
   [_sections[0] addObject:hexagon];
-  NSIndexPath *activeIndexPath =
+  NSIndexPath *indexPath =
       [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
   // Wrap this in an animation block with 0 duration to disable the shitty fade-in animation.
   [UIView animateWithDuration:0
       animations:^{
-        [_hiveCollectionView insertItemsAtIndexPaths:@[ activeIndexPath ]];
+        [_hiveCollectionView insertItemsAtIndexPaths:@[ indexPath ]];
       }];
 }
 

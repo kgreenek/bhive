@@ -8,13 +8,28 @@
 
 #import <UIKit/UIKit.h>
 
+@class BBHiveCell;
+
+@protocol BBHiveCellDelegate<NSObject>
+
+- (void)didFinishEditingCell:(BBHiveCell *)cell;
+
+@end
+
 @class BBHexagon;
 
 @interface BBHiveCell : UICollectionViewCell
 
+@property(nonatomic, weak) id<BBHiveCellDelegate> delegate;
 @property(nonatomic, strong) BBHexagon *hexagon;
 @property(nonatomic, assign, getter=isActive) BOOL active;
 @property(nonatomic, assign, getter=isEditing) BOOL editing;
-@property(nonatomic, strong) NSString *text;
+@property(nonatomic, readonly) NSString *editBoxText;
+
+- (void)addDidPanTarget:(id)target action:(SEL)action;
+- (void)addDidLongPressTarget:(id)target action:(SEL)action;
+
+- (void)removeDidPanTarget:(id)target action:(SEL)action;
+- (void)removeDidLongPressTarget:(id)target action:(SEL)action;
 
 @end

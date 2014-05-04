@@ -17,8 +17,11 @@ static const CGFloat kHexagonHeight = 55;
 
 @implementation BBHiveCell {
   NSArray *_colorNames;
-  UITextField *_editBox;
+  UITextView *_editBox;
+  UIView *_editBoxBackground;
   UILabel *_textLabel;
+  UIPanGestureRecognizer *_panRecognizer;
+  UILongPressGestureRecognizer *_longPressRecognizer;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -30,35 +33,55 @@ static const CGFloat kHexagonHeight = 55;
                      @"hex-purple",
                      @"hex-red",
                      @"hex-teal", ];
-    _editBox = [[UITextField alloc] init];
-    _editBox.backgroundColor = [UIColor whiteColor];
-    _editBox.returnKeyType = UIReturnKeyDone;
+
+    _editBoxBackground = [[UIView alloc] init];
+    _editBoxBackground.layer.cornerRadius = 8;
+    _editBoxBackground.backgroundColor = [UIColor colorWithRed:41 green:41 blue:63 alpha:0.3];
+    _editBoxBackground.alpha = 0;
+    [self addSubview:_editBoxBackground];
+
+    _editBox = [[UITextView alloc] init];
+    _editBox.backgroundColor = [UIColor clearColor];
+    _editBox.font = [UIFont fontWithName: @"GillSans" size:20];
+    _editBox.textColor = [UIColor whiteColor];
     _editBox.alpha = 0;
     [self addSubview:_editBox];
 
     _textLabel = [[UILabel alloc] init];
     _textLabel.alpha = 0;
-    _textLabel.text = @"Go to the grocery store and by eggs and milk and cheese and other things";
-    _textLabel.font = [UIFont fontWithName: @"GillSans-Bold" size:20.0];
+    _textLabel.font = [UIFont fontWithName: @"GillSans-Bold" size:20];
     _textLabel.textColor = [UIColor whiteColor];
     _textLabel.numberOfLines = 4;
     _textLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:_textLabel];
+
+    _panRecognizer = [[UIPanGestureRecognizer alloc] init];
+    _panRecognizer.maximumNumberOfTouches = 1;
+    [self addGestureRecognizer:_panRecognizer];
+
+    _longPressRecognizer = [[UILongPressGestureRecognizer alloc] init];
+    [self addGestureRecognizer:_longPressRecognizer];
   }
   return self;
 }
 
 - (void)layoutSubviews {
   [super layoutSubviews];
-  static CGFloat kTextBoxHorizontalPadding = 20;
-  _editBox.frame = CGRectMake(kTextBoxHorizontalPadding,
-                              self.bounds.size.height / 3,
-                              self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
-                              self.bounds.size.height / 3);
+  static CGFloat kTextBoxHorizontalPadding = 16;
+  static CGFloat kInnerTextBoxPadding = 6;
+  _editBoxBackground.frame = CGRectMake(kTextBoxHorizontalPadding,
+                                        self.bounds.size.height / 3,
+                                        self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
+                                        self.bounds.size.height / 3);
+  _editBox.frame =
+      CGRectMake(_editBoxBackground.frame.origin.x + kInnerTextBoxPadding,
+                 _editBoxBackground.frame.origin.y + kInnerTextBoxPadding,
+                 _editBoxBackground.frame.size.width - 2 * kInnerTextBoxPadding,
+                 _editBoxBackground.frame.size.height - 2 * kInnerTextBoxPadding);
   CGSize size =
       [_textLabel sizeThatFits:CGSizeMake(self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
                                           self.bounds.size.height / 2)];
-  _textLabel.frame = CGRectMake(kTextBoxHorizontalPadding,
+  _textLabel.frame = CGRectMake((self.bounds.size.width  - size.width) / 2,
                                 (self.bounds.size.height  - size.height) / 2,
                                 size.width,
                                 size.height);
@@ -70,11 +93,10 @@ static const CGFloat kHexagonHeight = 55;
 
 - (void)setHexagon:(BBHexagon *)hexagon {
   _hexagon = hexagon;
-  if (hexagon.type == kBBHexagonTypeCenter) {
-    self.backgroundView = [self centerHexagonImageView];
-  } else {
-    self.backgroundView = [self hexagonImageViewWithColor:hexagon.color];
-  }
+  self.backgroundView = hexagon.type == kBBHexagonTypeCenter
+      ? [self centerHexagonImageView] : [self hexagonImageViewWithColor:hexagon.color];
+  _textLabel.text = hexagon.text ?: @"Long Press to Edit";
+  _editBox.text = hexagon.text;
 }
 
 - (void)setActive:(BOOL)active {
@@ -86,16 +108,46 @@ static const CGFloat kHexagonHeight = 55;
 }
 
 - (void)setEditing:(BOOL)editing {
+  if (_editing == editing) {
+    return;
+  }
   _editing = editing;
   _textLabel.alpha = _editing || !_active ? 0 : 1;
   _editBox.alpha = _editing && _active ? 1 : 0;
+  _editBoxBackground.alpha = _editBox.alpha;
+  if (!_editing) {
+    [_delegate didFinishEditingCell:self];
+    [_editBox resignFirstResponder];
+  } else {
+    [_editBox becomeFirstResponder];
+  }
 }
 
-- (void)setText:(NSString *)text {
-  _editBox.text = text;
-  _textLabel.text = text;
-  [_textLabel sizeToFit];
-  [self setNeedsLayout];
+- (NSString *)editBoxText {
+  return _editBox.text;
+}
+
+- (void)prepareForReuse {
+  [_panRecognizer removeTarget:nil action:NULL];
+  [_longPressRecognizer removeTarget:nil action:NULL];
+}
+
+#pragma mark Action Targets
+
+- (void)addDidPanTarget:(id)target action:(SEL)action {
+  [_panRecognizer addTarget:target action:action];
+}
+
+- (void)addDidLongPressTarget:(id)target action:(SEL)action {
+  [_longPressRecognizer addTarget:target action:action];
+}
+
+- (void)removeDidPanTarget:(id)target action:(SEL)action {
+  [_panRecognizer removeTarget:target action:action];
+}
+
+- (void)removeDidLongPressTarget:(id)target action:(SEL)action {
+  [_longPressRecognizer removeTarget:target action:action];
 }
 
 #pragma mark Private Methods

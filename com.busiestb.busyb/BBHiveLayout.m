@@ -28,11 +28,8 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   self = [super init];
   if (self) {
     _delegate = delegate;
-    if (activeCellIndexPath) {
-      _hexagonPadding = kCellActiveHexagonPadding;
-    } else {
-      _hexagonPadding = kDefaultHexagonPadding;
-    }
+    _hexagonPadding = (activeCellIndexPath == nil)
+        ? kDefaultHexagonPadding : kCellActiveHexagonPadding;
     _activeCellIndexPath = activeCellIndexPath;
   }
   return self;
