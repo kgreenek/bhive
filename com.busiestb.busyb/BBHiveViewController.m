@@ -82,7 +82,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)collectionView:(UICollectionView *)collectionView
     didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-  if ([_activeCellPath isEqual:indexPath]) {
+  if ([_activeCellPath isEqual:indexPath] || indexPath.item == 0) {
     [self setActiveCellPath:nil];
   } else if (indexPath.item != 0) {
     [self setActiveCellPath:indexPath];
