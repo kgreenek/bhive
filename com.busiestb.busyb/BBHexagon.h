@@ -11,6 +11,7 @@
 typedef enum {
   kBBHexagonColorBlue,
   kBBHexagonColorGreen,
+  kBBHexagonColorRed,
   kBBHexagonColorOrange,
   kBBHexagonColorPurple,
   kBBHexagonColorTeal,

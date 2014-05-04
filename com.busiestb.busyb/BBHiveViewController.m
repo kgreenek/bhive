@@ -23,10 +23,15 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 @implementation BBHiveViewController {
   NSMutableArray *_sections;
   UICollectionView *_hiveCollectionView;
+  UITapGestureRecognizer *_backgroundTapRecognizer;
   NSIndexPath *_activeCellPath;
   BBHiveCell *_panningCell;
   BOOL _panningCellIsNew;
   BBHiveLayout *_hiveLayout;
+}
+
+- (void)dealloc {
+  [_backgroundTapRecognizer removeTarget:self action:@selector(didTapBackground)];
 }
 
 - (void)loadView {
@@ -42,6 +47,11 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   _hiveCollectionView.backgroundView =
       [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]];
+  _hiveCollectionView.backgroundView.userInteractionEnabled = YES;
+  _backgroundTapRecognizer =
+      [[UITapGestureRecognizer alloc] initWithTarget:self
+                                              action:@selector(didTapBackground)];
+  [_hiveCollectionView.backgroundView addGestureRecognizer:_backgroundTapRecognizer];
   self.view = _hiveCollectionView;
 }
 
@@ -88,13 +98,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     return;
   }
   if ([_activeCellPath isEqual:indexPath] || indexPath.item == 0) {
-    BBHiveCell *activeCell =
-        (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
-    if (activeCell.editing) {
-      activeCell.editing = NO;
-    } else {
-      [self setActiveCellPath:nil];
-    }
+    [self didTapBackground];
   } else if (indexPath.item != 0) {
     [self setActiveCellPath:indexPath];
   }
@@ -123,7 +127,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 }
 
 - (void)setActiveCellPath:(NSIndexPath *)activeCellPath {
-  if ([_activeCellPath isEqual:activeCellPath]) {
+  if ([_activeCellPath isEqual:activeCellPath] || (!_activeCellPath && !activeCellPath)) {
     return;
   }
   BBHiveCell *previousActiveCell =
@@ -140,6 +144,16 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
         // Wait to make the cell active so the animations don't interfere.
         activeCell.active = YES;
       }];
+}
+
+- (void)didTapBackground {
+  BBHiveCell *activeCell =
+      (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
+  if (activeCell.editing) {
+    activeCell.editing = NO;
+  } else {
+    [self setActiveCellPath:nil];
+  }
 }
 
 - (void)didLongPressHexagon:(UILongPressGestureRecognizer *)recognizer {

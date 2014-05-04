@@ -16,7 +16,6 @@ static const CGFloat kHexagonWidth = 48;
 static const CGFloat kHexagonHeight = 55;
 
 @implementation BBHiveCell {
-  NSArray *_colorNames;
   UITextView *_editBox;
   UIView *_editBoxBackground;
   UILabel *_textLabel;
@@ -27,29 +26,25 @@ static const CGFloat kHexagonHeight = 55;
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
-    _colorNames = @[ @"hex-blue",
-                     @"hex-green",
-                     @"hex-orange",
-                     @"hex-purple",
-                     @"hex-red",
-                     @"hex-teal", ];
-
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     _editBoxBackground = [[UIView alloc] init];
     _editBoxBackground.layer.cornerRadius = 8;
-    _editBoxBackground.backgroundColor = [UIColor colorWithRed:41 green:41 blue:63 alpha:0.3];
+    _editBoxBackground.backgroundColor =
+        [UIColor colorWithRed:41 / 255 green:41 / 255 blue:63 / 255 alpha:0.3];
     _editBoxBackground.alpha = 0;
     [self addSubview:_editBoxBackground];
 
     _editBox = [[UITextView alloc] init];
+    _editBox.keyboardAppearance = UIKeyboardAppearanceDark;
     _editBox.backgroundColor = [UIColor clearColor];
-    _editBox.font = [UIFont fontWithName: @"GillSans" size:20];
+    _editBox.font = [UIFont fontWithName:@"GillSans" size:20];
     _editBox.textColor = [UIColor whiteColor];
     _editBox.alpha = 0;
     [self addSubview:_editBox];
 
     _textLabel = [[UILabel alloc] init];
     _textLabel.alpha = 0;
-    _textLabel.font = [UIFont fontWithName: @"GillSans-Bold" size:20];
+    _textLabel.font = [UIFont fontWithName:@"GillSans-Bold" size:20];
     _textLabel.textColor = [UIColor whiteColor];
     _textLabel.numberOfLines = 4;
     _textLabel.textAlignment = NSTextAlignmentCenter;
@@ -153,11 +148,31 @@ static const CGFloat kHexagonHeight = 55;
 #pragma mark Private Methods
 
 - (UIImageView *)hexagonImageViewWithColor:(BBHexagonColor)color {
-  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:_colorNames[color]]];
+  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:[self imageNameForColor:color]]];
 }
 
 - (UIImageView *)centerHexagonImageView {
   return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"center"]];
+}
+
+- (NSString *)imageNameForColor:(BBHexagonColor)color {
+  switch (color) {
+    case kBBHexagonColorBlue:
+      return @"hex-blue";
+    case kBBHexagonColorGreen:
+      return @"hex-green";
+    case kBBHexagonColorRed:
+      return @"hex-red";
+    case kBBHexagonColorOrange:
+      return @"hex-orange";
+    case kBBHexagonColorPurple:
+      return @"hex-purple";
+    case kBBHexagonColorTeal:
+      return @"hex-teal";
+    case kBBHexagonColorNumColors:
+      NSLog(@"ERROR: Invalid color");
+      return nil;
+  }
 }
 
 @end
