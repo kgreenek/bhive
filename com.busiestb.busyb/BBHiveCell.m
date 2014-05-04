@@ -17,12 +17,15 @@ static const CGFloat kHexagonHeight = 55;
 
 @implementation BBHiveCell {
   NSArray *_colorNames;
-  UITextField *_textBox;
+  UITextField *_editBox;
+  UILabel *_textLabel;
 }
 
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
+    self.autoresizesSubviews = YES;
+
     _colorNames = @[ @"hex-black",
                      @"hex-blue",
                      @"hex-green",
@@ -34,11 +37,20 @@ static const CGFloat kHexagonHeight = 55;
                      @"hex-purp",
                      @"hex-salmon",
                      @"hex-teal", ];
-    _textBox = [[UITextField alloc] init];
-    _textBox.backgroundColor = [UIColor whiteColor];
-    _textBox.returnKeyType = UIReturnKeyDone;
-    _textBox.hidden = YES;
-    [self addSubview:_textBox];
+    _editBox = [[UITextField alloc] init];
+    _editBox.backgroundColor = [UIColor whiteColor];
+    _editBox.returnKeyType = UIReturnKeyDone;
+    _editBox.alpha = 0;
+    [self addSubview:_editBox];
+
+    _textLabel = [[UILabel alloc] init];
+    _textLabel.alpha = 0;
+    _textLabel.text = @"Some text";
+    _textLabel.font = [UIFont fontWithName:@"soemthing" size:12];
+    _textLabel.numberOfLines = 3;
+    _textLabel.textAlignment = NSTextAlignmentCenter;
+    [_textLabel sizeToFit];
+    [self addSubview:_textLabel];
   }
   return self;
 }
@@ -46,10 +58,14 @@ static const CGFloat kHexagonHeight = 55;
 - (void)layoutSubviews {
   [super layoutSubviews];
   static CGFloat kTextBoxHorizontalPadding = 30;
-  _textBox.frame = CGRectMake(kTextBoxHorizontalPadding,
-                              self.frame.size.height / 3,
-                              self.frame.size.width - 2 * kTextBoxHorizontalPadding,
-                              self.frame.size.height / 3);
+  _editBox.frame = CGRectMake(kTextBoxHorizontalPadding,
+                              self.bounds.size.height / 3,
+                              self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
+                              self.bounds.size.height / 3);
+  _textLabel.frame = CGRectMake(kTextBoxHorizontalPadding,
+                                self.bounds.size.height / 3,
+                                self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
+                                self.bounds.size.height / 3);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -65,9 +81,24 @@ static const CGFloat kHexagonHeight = 55;
   }
 }
 
-- (void)setTextBoxHidden:(BOOL)hidden {
-  _textBoxHidden = hidden;
-//  _textBox.hidden = hidden;
+- (void)setActive:(BOOL)active {
+  _active = active;
+  if (!_active) {
+    self.editing = NO;
+  }
+  _textLabel.alpha = active && !_editing ? 1 : 0;
+}
+
+- (void)setEditing:(BOOL)editing {
+  _editing = editing;
+  _textLabel.alpha = _editing || !_active ? 0 : 1;
+  _editBox.alpha = _editing && _active ? 1 : 0;
+}
+
+- (void)setText:(NSString *)text {
+  _editBox.text = text;
+  _textLabel.text = text;
+  [_textLabel sizeToFit];
   [self setNeedsLayout];
 }
 

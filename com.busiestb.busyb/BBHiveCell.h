@@ -13,6 +13,8 @@
 @interface BBHiveCell : UICollectionViewCell
 
 @property(nonatomic, strong) BBHexagon *hexagon;
-@property(nonatomic, assign) BOOL textBoxHidden;
+@property(nonatomic, assign, getter=isActive) BOOL active;
+@property(nonatomic, assign, getter=isEditing) BOOL editing;
+@property(nonatomic, strong) NSString *text;
 
 @end

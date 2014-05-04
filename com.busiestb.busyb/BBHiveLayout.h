@@ -19,7 +19,7 @@
 @property(nonatomic, weak) id<BBHiveLayoutDelegate> delegate;
 
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
-                      activeCell:(NSIndexPath *)activeCellIndexPath;
+                  activeCellPath:(NSIndexPath *)activeCellIndexPath;
 
 - (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords;
 

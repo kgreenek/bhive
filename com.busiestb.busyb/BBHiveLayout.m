@@ -24,7 +24,7 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 }
 
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
-                      activeCell:(NSIndexPath *)activeCellIndexPath {
+                  activeCellPath:(NSIndexPath *)activeCellIndexPath {
   self = [super init];
   if (self) {
     _delegate = delegate;

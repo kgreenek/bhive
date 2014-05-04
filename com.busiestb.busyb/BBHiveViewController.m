@@ -22,14 +22,14 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 @implementation BBHiveViewController {
   NSMutableArray *_sections;
   UICollectionView *_hiveCollectionView;
-  NSIndexPath *_activeCell;
+  NSIndexPath *_activeCellPath;
   BBHiveCell *_panningCell;
   BOOL _panningCellIsNew;
   BBHiveLayout *_hiveLayout;
 }
 
 - (void)loadView {
-  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:nil];
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCellPath:nil];
   _hiveCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero
                                            collectionViewLayout:_hiveLayout];
   _hiveCollectionView.scrollEnabled = NO;
@@ -80,10 +80,10 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)collectionView:(UICollectionView *)collectionView
     didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-  if ([_activeCell isEqual:indexPath]) {
-    [self setActiveCell:nil];
+  if ([_activeCellPath isEqual:indexPath]) {
+    [self setActiveCellPath:nil];
   } else if (indexPath.item != 0) {
-    [self setActiveCell:indexPath];
+    [self setActiveCellPath:indexPath];
   }
 }
 
@@ -99,44 +99,67 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   return _sections[indexPath.section][indexPath.item];
 }
 
-- (void)setActiveCell:(NSIndexPath *)activeCell {
-  if ([_activeCell isEqual:activeCell]) {
+- (void)setActiveCellPath:(NSIndexPath *)activeCellPath {
+  if ([_activeCellPath isEqual:activeCellPath]) {
     return;
   }
-  if (_activeCell) {
-    [(BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCell] setTextBoxHidden:YES];
-  }
-  _activeCell = activeCell;
-  [(BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCell] setTextBoxHidden:NO];
-  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:activeCell];
-  [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
+  BBHiveCell *previousActiveCell =
+      (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
+  _activeCellPath = activeCellPath;
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCellPath:activeCellPath];
+  BBHiveCell *activeCell =
+      (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
+  previousActiveCell.active = NO;
+  [_hiveCollectionView setCollectionViewLayout:_hiveLayout
+      animated:YES
+      completion:^(BOOL finished) {
+        // Wait to make the cell active so the animations don't interfere.
+        activeCell.active = YES;
+      }];
 }
 
 - (void)didPanHexagon:(UIPanGestureRecognizer *)recognizer {
-  if (_activeCell) {
+  if (_activeCellPath) {
     return;
   }
   CGPoint location = [recognizer locationInView:recognizer.view.superview];
   if (recognizer.state == UIGestureRecognizerStateEnded) {
-    [_panningCell removeFromSuperview];
     CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
     BBHexagon *hexagon;
     if ([self hexagonAtHexCoords:hexCoords] != nil) {
       if (_panningCellIsNew) {
-        _panningCell = nil;
+        // Animate the cell back to the center to communicate that it couldn't be created.
+        [UIView animateWithDuration:0.15
+            animations:^{
+              CGSize size = [_panningCell sizeThatFits:CGSizeZero];
+              _panningCell.frame =
+                  CGRectMake(_hiveCollectionView.bounds.size.width / 2 - size.width / 2,
+                             _hiveCollectionView.bounds.size.height / 2 - size.height / 2,
+                             size.width,
+                             size.height);
+              _panningCell.alpha = 0.4;
+            }
+            completion:^(BOOL finished) {
+              [_panningCell removeFromSuperview];
+              _panningCell = nil;
+            }];
         return;
       }
       hexagon = _panningCell.hexagon;
     } else {
       hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
     }
+    [_panningCell removeFromSuperview];
     [_sections[0] addObject:hexagon];
-    [UIView animateWithDuration:0 animations:^{
-      [_hiveCollectionView performBatchUpdates:^{
-        [_hiveCollectionView insertItemsAtIndexPaths:
-            @[ [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0] ]];
-      } completion:nil];
-    }];
+    NSIndexPath *activeIndexPath =
+        [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
+    [UIView animateWithDuration:0
+        animations:^{
+          [_hiveCollectionView performBatchUpdates:^{
+                [_hiveCollectionView insertItemsAtIndexPaths:@[ activeIndexPath ]];
+              }
+              completion:nil];
+        }];
     _panningCell = nil;
     return;
   }
@@ -162,7 +185,8 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       _panningCell.hexagon = [BBHexagon cellHexagon];
       _panningCellIsNew = YES;
     }
-    [_panningCell sizeToFit];
+    CGSize size = [_panningCell sizeThatFits:CGSizeZero];
+    _panningCell.frame = CGRectMake(0, 0, size.width * 1.5, size.height * 1.5);
     [_hiveCollectionView addSubview:_panningCell];
   }
   _panningCell.center = location;
