@@ -22,25 +22,22 @@
   return self;
 }
 
-+ (BBHexagon *)emptyCellHexagon {
-  BBHexagon *hexagon = [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
-                                                       type:kBBHexagonTypeEmpty
-                                                      color:[self.class randomHexagonColor]];
-  return hexagon;
-}
-
-+ (BBHexagon *)cellHexagonWithHexCoords:(CGPoint)hexCoords color:(BBHexagonColor)color {
-  BBHexagon *hexagon = [[BBHexagon alloc] initWithHexCoords:hexCoords
-                                                       type:kBBHexagonTypeCell
-                                                      color:color];
-  return hexagon;
++ (BBHexagon *)cellHexagon {
+  return [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
+                                         type:kBBHexagonTypeCell
+                                        color:[self.class randomHexagonColor]];
 }
 
 + (BBHexagon *)centerHexagon {
-  BBHexagon *hexagon = [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
-                                                       type:kBBHexagonTypeCenter
-                                                      color:kBBHexagonColorBlack];
-  return hexagon;
+  return [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
+                                         type:kBBHexagonTypeCenter
+                                        color:kBBHexagonColorBlack];
+}
+
++ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords {
+  return [[BBHexagon alloc] initWithHexCoords:hexCoords
+                                         type:hexagon.type
+                                        color:hexagon.color];
 }
 
 + (BBHexagonColor)randomHexagonColor {

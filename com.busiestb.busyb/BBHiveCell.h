@@ -13,5 +13,6 @@
 @interface BBHiveCell : UICollectionViewCell
 
 @property(nonatomic, strong) BBHexagon *hexagon;
+@property(nonatomic, assign) BOOL textBoxHidden;
 
 @end

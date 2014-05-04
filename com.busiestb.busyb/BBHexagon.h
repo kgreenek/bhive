@@ -23,7 +23,6 @@ typedef enum {
 } BBHexagonColor;
 
 typedef enum {
-  kBBHexagonTypeEmpty,
   kBBHexagonTypeCell,
   kBBHexagonTypeCenter,
 } BBHexagonType;
@@ -34,9 +33,8 @@ typedef enum {
 @property(nonatomic, readonly) BBHexagonType type;
 @property(nonatomic, readonly) BBHexagonColor color;
 
-+ (BBHexagon *)emptyCellHexagon;
-+ (BBHexagon *)cellHexagonWithHexCoords:(CGPoint)hexCoords color:(BBHexagonColor)color;
++ (BBHexagon *)cellHexagon;
 + (BBHexagon *)centerHexagon;
-+ (BBHexagonColor)randomHexagonColor;
++ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords;
 
 @end

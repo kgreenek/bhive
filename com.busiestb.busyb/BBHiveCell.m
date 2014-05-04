@@ -17,6 +17,7 @@ static const CGFloat kHexagonHeight = 55;
 
 @implementation BBHiveCell {
   NSArray *_colorNames;
+  UITextField *_textBox;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -33,8 +34,22 @@ static const CGFloat kHexagonHeight = 55;
                      @"hex-purp",
                      @"hex-salmon",
                      @"hex-teal", ];
+    _textBox = [[UITextField alloc] init];
+    _textBox.backgroundColor = [UIColor whiteColor];
+    _textBox.returnKeyType = UIReturnKeyDone;
+    _textBox.hidden = YES;
+    [self addSubview:_textBox];
   }
   return self;
+}
+
+- (void)layoutSubviews {
+  [super layoutSubviews];
+  static CGFloat kTextBoxHorizontalPadding = 30;
+  _textBox.frame = CGRectMake(kTextBoxHorizontalPadding,
+                              self.frame.size.height / 3,
+                              self.frame.size.width - 2 * kTextBoxHorizontalPadding,
+                              self.frame.size.height / 3);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -48,6 +63,12 @@ static const CGFloat kHexagonHeight = 55;
   } else {
     self.backgroundView = [self hexagonImageViewWithColor:hexagon.color];
   }
+}
+
+- (void)setTextBoxHidden:(BOOL)hidden {
+  _textBoxHidden = hidden;
+//  _textBox.hidden = hidden;
+  [self setNeedsLayout];
 }
 
 #pragma mark Private Methods

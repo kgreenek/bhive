@@ -23,8 +23,8 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   NSMutableArray *_sections;
   UICollectionView *_hiveCollectionView;
   NSIndexPath *_activeCell;
-  BBHexagon *_centerHexagon;
   BBHiveCell *_panningCell;
+  BOOL _panningCellIsNew;
   BBHiveLayout *_hiveLayout;
 }
 
@@ -47,8 +47,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 - (void)viewDidLoad {
   [super viewDidLoad];
   NSMutableArray *cells = [NSMutableArray array];
-  _centerHexagon = [BBHexagon centerHexagon];
-  [cells addObject:_centerHexagon];
+  [cells addObject:[BBHexagon centerHexagon]];
   _sections = [NSMutableArray array];
   [_sections addObject:cells];
   [_hiveCollectionView reloadData];
@@ -101,7 +100,14 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 }
 
 - (void)setActiveCell:(NSIndexPath *)activeCell {
+  if ([_activeCell isEqual:activeCell]) {
+    return;
+  }
+  if (_activeCell) {
+    [(BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCell] setTextBoxHidden:YES];
+  }
   _activeCell = activeCell;
+  [(BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCell] setTextBoxHidden:NO];
   _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCell:activeCell];
   [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
 }
@@ -116,12 +122,13 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
     BBHexagon *hexagon;
     if ([self hexagonAtHexCoords:hexCoords] != nil) {
-      if (_panningCell.hexagon.type == kBBHexagonTypeEmpty) {
+      if (_panningCellIsNew) {
+        _panningCell = nil;
         return;
       }
       hexagon = _panningCell.hexagon;
     } else {
-      hexagon = [BBHexagon cellHexagonWithHexCoords:hexCoords color:_panningCell.hexagon.color];
+      hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
     }
     [_sections[0] addObject:hexagon];
     [UIView animateWithDuration:0 animations:^{
@@ -150,8 +157,10 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
         } completion:nil];
       }];
       _panningCell.hexagon = hexagon;
+      _panningCellIsNew = NO;
     } else {
-      _panningCell.hexagon = [BBHexagon emptyCellHexagon];
+      _panningCell.hexagon = [BBHexagon cellHexagon];
+      _panningCellIsNew = YES;
     }
     [_panningCell sizeToFit];
     [_hiveCollectionView addSubview:_panningCell];
