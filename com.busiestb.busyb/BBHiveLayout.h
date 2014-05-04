@@ -22,5 +22,6 @@
                   activeCellPath:(NSIndexPath *)activeCellIndexPath;
 
 - (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords;
+- (CGRect)frameForHexagonAtHexCoords:(CGPoint)hexCoords;
 
 @end

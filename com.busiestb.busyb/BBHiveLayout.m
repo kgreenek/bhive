@@ -46,6 +46,14 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   return CGPointMake(x, y);
 }
 
+- (CGRect)frameForHexagonAtHexCoords:(CGPoint)hexCoords {
+  CGPoint position = [self positionForHexagonWithHexCoords:hexCoords];
+  CGPoint offsetForActiveHexagon = [self offsetForActiveHexagon];
+  position.x += offsetForActiveHexagon.x;
+  position.y += offsetForActiveHexagon.y;
+  return CGRectMake(position.x, position.y, kHexagonWidth, kHexagonHeight);
+}
+
 #pragma mark Overriden Methods
 
 - (void)prepareLayout {
@@ -128,11 +136,7 @@ static const CGFloat kCellActiveHexagonPadding = 120;
                       kActiveHexagonHeight);
   }
   CGPoint hexCoords = [_delegate hexCoordinatesForItemAtIndexPath:indexPath];
-  CGPoint position = [self positionForHexagonWithHexCoords:hexCoords];
-  CGPoint offsetForActiveHexagon = [self offsetForActiveHexagon];
-  position.x += offsetForActiveHexagon.x;
-  position.y += offsetForActiveHexagon.y;
-  return CGRectMake(position.x, position.y, kHexagonWidth, kHexagonHeight);
+  return [self frameForHexagonAtHexCoords:hexCoords];
 }
 
 - (CGPoint)positionForHexagonWithHexCoords:(CGPoint)hexCoords {

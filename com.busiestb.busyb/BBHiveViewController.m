@@ -126,17 +126,19 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   if (recognizer.state == UIGestureRecognizerStateEnded) {
     CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
     BBHexagon *hexagon;
-    if ([self hexagonAtHexCoords:hexCoords] != nil) {
+    CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
+    CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
+    BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
+    if ([self hexagonAtHexCoords:hexCoords] != nil || offscreen) {
       if (_panningCellIsNew) {
         // Animate the cell back to the center to communicate that it couldn't be created.
         [UIView animateWithDuration:0.15
             animations:^{
-              CGSize size = [_panningCell sizeThatFits:CGSizeZero];
               _panningCell.frame =
-                  CGRectMake(_hiveCollectionView.bounds.size.width / 2 - size.width / 2,
-                             _hiveCollectionView.bounds.size.height / 2 - size.height / 2,
-                             size.width,
-                             size.height);
+                  CGRectMake(_hiveCollectionView.bounds.size.width / 2 - hexagonSize.width / 2,
+                             _hiveCollectionView.bounds.size.height / 2 - hexagonSize.height / 2,
+                             hexagonSize.width,
+                             hexagonSize.height);
               _panningCell.alpha = 0.4;
             }
             completion:^(BOOL finished) {
