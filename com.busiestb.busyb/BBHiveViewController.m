@@ -122,76 +122,82 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   if (_activeCellPath) {
     return;
   }
-  CGPoint location = [recognizer locationInView:recognizer.view.superview];
   if (recognizer.state == UIGestureRecognizerStateEnded) {
-    CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
-    BBHexagon *hexagon;
-    CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
-    CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
-    BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
-    if ([self hexagonAtHexCoords:hexCoords] != nil || offscreen) {
-      if (_panningCellIsNew) {
-        // Animate the cell back to the center to communicate that it couldn't be created.
-        [UIView animateWithDuration:0.15
-            animations:^{
-              _panningCell.frame =
-                  CGRectMake(_hiveCollectionView.bounds.size.width / 2 - hexagonSize.width / 2,
-                             _hiveCollectionView.bounds.size.height / 2 - hexagonSize.height / 2,
-                             hexagonSize.width,
-                             hexagonSize.height);
-              _panningCell.alpha = 0.4;
-            }
-            completion:^(BOOL finished) {
-              [_panningCell removeFromSuperview];
-              _panningCell = nil;
-            }];
-        return;
-      }
-      hexagon = _panningCell.hexagon;
-    } else {
-      hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
-    }
-    [_panningCell removeFromSuperview];
-    [_sections[0] addObject:hexagon];
-    NSIndexPath *activeIndexPath =
-        [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
-    [UIView animateWithDuration:0
-        animations:^{
-          [_hiveCollectionView performBatchUpdates:^{
-                [_hiveCollectionView insertItemsAtIndexPaths:@[ activeIndexPath ]];
-              }
-              completion:nil];
-        }];
-    _panningCell = nil;
+    [self panningDidEndWithRecognizer:recognizer];
     return;
   }
   if (recognizer.state == UIGestureRecognizerStateBegan) {
-    if (_panningCell) {
-      // This really should never be able to happen.
+    [self panningDidBeginWithRecognizer:recognizer];
+  }
+  _panningCell.center = [recognizer locationInView:recognizer.view.superview];
+}
+
+- (void)panningDidBeginWithRecognizer:(UIPanGestureRecognizer *)recognizer {
+  if (_panningCell) {
+    // This really should never be able to happen.
+    return;
+  }
+  _panningCell = [[BBHiveCell alloc] init];
+  BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
+  if (hexagon.type == kBBHexagonTypeCell) {
+    NSUInteger item = [_sections[0] indexOfObject:hexagon];
+    [_sections[0] removeObject:hexagon];
+    [UIView animateWithDuration:0 animations:^{
+      [_hiveCollectionView performBatchUpdates:^{
+        [_hiveCollectionView deleteItemsAtIndexPaths:
+            @[ [NSIndexPath indexPathForItem:item inSection:0] ]];
+      } completion:nil];
+    }];
+    _panningCell.hexagon = hexagon;
+    _panningCellIsNew = NO;
+  } else {
+    _panningCell.hexagon = [BBHexagon cellHexagon];
+    _panningCellIsNew = YES;
+  }
+  CGSize size = [_panningCell sizeThatFits:CGSizeZero];
+  _panningCell.frame = CGRectMake(0, 0, size.width * 1.5, size.height * 1.5);
+  [_hiveCollectionView addSubview:_panningCell];
+}
+
+- (void)panningDidEndWithRecognizer:(UIPanGestureRecognizer *)recognizer {
+  CGPoint location = [recognizer locationInView:recognizer.view.superview];
+  CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
+  BBHexagon *hexagon;
+  CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
+  CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
+  BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
+  if ([self hexagonAtHexCoords:hexCoords] != nil || offscreen) {
+    if (_panningCellIsNew) {
+      // Animate the cell back to the center to communicate that it couldn't be created.
+      [UIView animateWithDuration:0.15
+          animations:^{
+            _panningCell.frame =
+                CGRectMake(_hiveCollectionView.bounds.size.width / 2 - hexagonSize.width / 2,
+                           _hiveCollectionView.bounds.size.height / 2 - hexagonSize.height / 2,
+                           hexagonSize.width,
+                           hexagonSize.height);
+            _panningCell.alpha = 0.4;
+          }
+          completion:^(BOOL finished) {
+            [_panningCell removeFromSuperview];
+            _panningCell = nil;
+          }];
       return;
     }
-    _panningCell = [[BBHiveCell alloc] init];
-    BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
-    if (hexagon.type == kBBHexagonTypeCell) {
-      NSUInteger item = [_sections[0] indexOfObject:hexagon];
-      [_sections[0] removeObject:hexagon];
-      [UIView animateWithDuration:0 animations:^{
-        [_hiveCollectionView performBatchUpdates:^{
-          [_hiveCollectionView deleteItemsAtIndexPaths:
-              @[ [NSIndexPath indexPathForItem:item inSection:0] ]];
-        } completion:nil];
-      }];
-      _panningCell.hexagon = hexagon;
-      _panningCellIsNew = NO;
-    } else {
-      _panningCell.hexagon = [BBHexagon cellHexagon];
-      _panningCellIsNew = YES;
-    }
-    CGSize size = [_panningCell sizeThatFits:CGSizeZero];
-    _panningCell.frame = CGRectMake(0, 0, size.width * 1.5, size.height * 1.5);
-    [_hiveCollectionView addSubview:_panningCell];
+    hexagon = _panningCell.hexagon;
+  } else {
+    hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
   }
-  _panningCell.center = location;
+  [_panningCell removeFromSuperview];
+  [_sections[0] addObject:hexagon];
+  NSIndexPath *activeIndexPath =
+      [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
+  // Wrap this in an animation block with 0 duration to disable the shitty fade-in animation.
+  [UIView animateWithDuration:0
+      animations:^{
+        [_hiveCollectionView insertItemsAtIndexPaths:@[ activeIndexPath ]];
+      }];
+  _panningCell = nil;
 }
 
 - (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {
