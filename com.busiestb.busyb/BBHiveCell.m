@@ -24,8 +24,6 @@ static const CGFloat kHexagonHeight = 55;
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
-    self.autoresizesSubviews = YES;
-
     _colorNames = @[ @"hex-blue",
                      @"hex-green",
                      @"hex-orange",
@@ -40,11 +38,11 @@ static const CGFloat kHexagonHeight = 55;
 
     _textLabel = [[UILabel alloc] init];
     _textLabel.alpha = 0;
-    _textLabel.text = @"Some text";
-    _textLabel.font = [UIFont fontWithName:@"soemthing" size:12];
-    _textLabel.numberOfLines = 3;
+    _textLabel.text = @"Go to the grocery store and by eggs and milk and cheese and other things";
+    _textLabel.font = [UIFont fontWithName: @"GillSans-Bold" size:20.0];
+    _textLabel.textColor = [UIColor whiteColor];
+    _textLabel.numberOfLines = 4;
     _textLabel.textAlignment = NSTextAlignmentCenter;
-    [_textLabel sizeToFit];
     [self addSubview:_textLabel];
   }
   return self;
@@ -52,15 +50,18 @@ static const CGFloat kHexagonHeight = 55;
 
 - (void)layoutSubviews {
   [super layoutSubviews];
-  static CGFloat kTextBoxHorizontalPadding = 30;
+  static CGFloat kTextBoxHorizontalPadding = 20;
   _editBox.frame = CGRectMake(kTextBoxHorizontalPadding,
                               self.bounds.size.height / 3,
                               self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
                               self.bounds.size.height / 3);
+  CGSize size =
+      [_textLabel sizeThatFits:CGSizeMake(self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
+                                          self.bounds.size.height / 2)];
   _textLabel.frame = CGRectMake(kTextBoxHorizontalPadding,
-                                self.bounds.size.height / 3,
-                                self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
-                                self.bounds.size.height / 3);
+                                (self.bounds.size.height  - size.height) / 2,
+                                size.width,
+                                size.height);
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
