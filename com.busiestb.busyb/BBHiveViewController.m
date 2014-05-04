@@ -82,6 +82,11 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)collectionView:(UICollectionView *)collectionView
     didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+  if (_panningCell) {
+    // This happens if the user is panning with one finger, and taps on a different
+    // cell with another finger.
+    return;
+  }
   if ([_activeCellPath isEqual:indexPath] || indexPath.item == 0) {
     [self setActiveCellPath:nil];
   } else if (indexPath.item != 0) {
