@@ -31,7 +31,7 @@
 + (BBHexagon *)centerHexagon {
   return [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
                                          type:kBBHexagonTypeCenter
-                                        color:kBBHexagonColorBlack];
+                                        color:kBBHexagonColorBlue];
 }
 
 + (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords {

@@ -26,16 +26,11 @@ static const CGFloat kHexagonHeight = 55;
   if (self) {
     self.autoresizesSubviews = YES;
 
-    _colorNames = @[ @"hex-black",
-                     @"hex-blue",
+    _colorNames = @[ @"hex-blue",
                      @"hex-green",
-                     @"hex-lavender",
-                     @"hex-mint",
                      @"hex-orange",
-                     @"hex-orange",
-                     @"hex-pink",
-                     @"hex-purp",
-                     @"hex-salmon",
+                     @"hex-purple",
+                     @"hex-red",
                      @"hex-teal", ];
     _editBox = [[UITextField alloc] init];
     _editBox.backgroundColor = [UIColor whiteColor];
@@ -109,7 +104,7 @@ static const CGFloat kHexagonHeight = 55;
 }
 
 - (UIImageView *)centerHexagonImageView {
-  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-center"]];
+  return [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"center"]];
 }
 
 @end

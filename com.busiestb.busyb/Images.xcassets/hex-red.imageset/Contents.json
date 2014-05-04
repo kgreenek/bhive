@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "hex-mint.png"
+      "filename" : "hex-red.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "hex-mint@2x.png"
+      "filename" : "hex-red@2x.png"
     }
   ],
   "info" : {

@@ -9,15 +9,10 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-  kBBHexagonColorBlack,
   kBBHexagonColorBlue,
   kBBHexagonColorGreen,
-  kBBHexagonColorLavender,
-  kBBHexagonColorMint,
   kBBHexagonColorOrange,
-  kBBHexagonColorPink,
-  kBBHexagonColorPurp,
-  kBBHexagonColorSalmon,
+  kBBHexagonColorPurple,
   kBBHexagonColorTeal,
   kBBHexagonColorNumColors,
 } BBHexagonColor;

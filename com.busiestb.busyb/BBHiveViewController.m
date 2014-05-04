@@ -70,8 +70,10 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       [_hiveCollectionView dequeueReusableCellWithReuseIdentifier:kHiveCellIdentifier
                                                      forIndexPath:indexPath];
   cell.hexagon = [self hexagonForIndexPath:indexPath];
-  [cell addGestureRecognizer:
-      [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanHexagon:)]];
+  UIPanGestureRecognizer *recognizer =
+      [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanHexagon:)];
+  recognizer.maximumNumberOfTouches = 1;
+  [cell addGestureRecognizer:recognizer];
   [cell sizeToFit];
   return cell;
 }
@@ -127,16 +129,18 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     return;
   }
   if (recognizer.state == UIGestureRecognizerStateBegan) {
+    if (_panningCell) {
+      // This can happen if the user it trying to drag multiple hexagons at the same time.
+      recognizer.enabled = NO;
+      recognizer.enabled = YES;
+      return;
+    }
     [self panningDidBeginWithRecognizer:recognizer];
   }
   _panningCell.center = [recognizer locationInView:recognizer.view.superview];
 }
 
 - (void)panningDidBeginWithRecognizer:(UIPanGestureRecognizer *)recognizer {
-  if (_panningCell) {
-    // This really should never be able to happen.
-    return;
-  }
   _panningCell = [[BBHiveCell alloc] init];
   BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
   if (hexagon.type == kBBHexagonTypeCell) {
@@ -162,8 +166,8 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 - (void)panningDidEndWithRecognizer:(UIPanGestureRecognizer *)recognizer {
   CGPoint location = [recognizer locationInView:recognizer.view.superview];
   CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
-  BBHexagon *hexagon;
   CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
+  BBHexagon *hexagon;
   CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
   BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
   if ([self hexagonAtHexCoords:hexCoords] != nil || offscreen) {
@@ -189,6 +193,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
     hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
   }
   [_panningCell removeFromSuperview];
+  _panningCell = nil;
   [_sections[0] addObject:hexagon];
   NSIndexPath *activeIndexPath =
       [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
@@ -197,7 +202,6 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
       animations:^{
         [_hiveCollectionView insertItemsAtIndexPaths:@[ activeIndexPath ]];
       }];
-  _panningCell = nil;
 }
 
 - (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {

@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AA3181619161B4D0088E98C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3181519161B4D0088E98C /* Images.xcassets */; };
 		E25BE94F18E8D8D400276890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE94E18E8D8D400276890 /* Foundation.framework */; };
 		E25BE95118E8D8D400276890 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95018E8D8D400276890 /* CoreGraphics.framework */; };
 		E25BE95318E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
 		E25BE95918E8D8D400276890 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E25BE95718E8D8D400276890 /* InfoPlist.strings */; };
 		E25BE95B18E8D8D400276890 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE95A18E8D8D400276890 /* main.m */; };
 		E25BE95F18E8D8D400276890 /* BBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE95E18E8D8D400276890 /* BBAppDelegate.m */; };
-		E25BE96118E8D8D400276890 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25BE96018E8D8D400276890 /* Images.xcassets */; };
 		E25BE96818E8D8D400276890 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE96718E8D8D400276890 /* XCTest.framework */; };
 		E25BE96918E8D8D400276890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE94E18E8D8D400276890 /* Foundation.framework */; };
 		E25BE96A18E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
@@ -36,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0AA3181519161B4D0088E98C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E25BE94B18E8D8D400276890 /* com.busiestb.busyb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = com.busiestb.busyb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E25BE94E18E8D8D400276890 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E25BE95018E8D8D400276890 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -46,7 +47,6 @@
 		E25BE95C18E8D8D400276890 /* com.busiestb.busyb-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "com.busiestb.busyb-Prefix.pch"; sourceTree = "<group>"; };
 		E25BE95D18E8D8D400276890 /* BBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBAppDelegate.h; sourceTree = "<group>"; };
 		E25BE95E18E8D8D400276890 /* BBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBAppDelegate.m; sourceTree = "<group>"; };
-		E25BE96018E8D8D400276890 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E25BE96618E8D8D400276890 /* com.busiestb.busybTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = com.busiestb.busybTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E25BE96718E8D8D400276890 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E25BE96F18E8D8D400276890 /* com.busiestb.busybTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.busiestb.busybTests-Info.plist"; sourceTree = "<group>"; };
@@ -119,11 +119,11 @@
 		E25BE95418E8D8D400276890 /* com.busiestb.busyb */ = {
 			isa = PBXGroup;
 			children = (
+				0AA3181519161B4D0088E98C /* Images.xcassets */,
 				E25BE95D18E8D8D400276890 /* BBAppDelegate.h */,
 				E25BE95E18E8D8D400276890 /* BBAppDelegate.m */,
 				E25BE98818E9367A00276890 /* BBHexagon.h */,
 				E25BE98918E9367A00276890 /* BBHexagon.m */,
-				E25BE96018E8D8D400276890 /* Images.xcassets */,
 				E25BE95518E8D8D400276890 /* Supporting Files */,
 				E25BE97D18E8D97C00276890 /* BBHiveViewController.h */,
 				E25BE97E18E8D97C00276890 /* BBHiveViewController.m */,
@@ -244,7 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25BE95918E8D8D400276890 /* InfoPlist.strings in Resources */,
-				E25BE96118E8D8D400276890 /* Images.xcassets in Resources */,
+				0AA3181619161B4D0088E98C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
