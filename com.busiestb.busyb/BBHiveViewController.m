@@ -100,8 +100,11 @@ static NSString * const kHexagonEntityName = @"Hexagon";
     // cell with another finger.
     return;
   }
-  if ([_activeCellPath isEqual:indexPath] || indexPath.item == 0) {
+  if (indexPath.item == 0) {
     [self didTapBackground];
+  } else if ([_activeCellPath isEqual:indexPath]) {
+    BBHiveCell *cell = (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:indexPath];
+    cell.editing = !cell.editing;
   } else if (indexPath.item != 0) {
     [self setActiveCellPath:indexPath];
   }

@@ -136,7 +136,7 @@ static const CGFloat kHexagonHeight = 55;
 - (void)update {
   self.backgroundView = _hexagon.type == kBBHexagonTypeCenter
       ? [self centerHexagonImageView] : [self hexagonImageViewWithColor:_hexagon.color];
-  _textLabel.text = _hexagon.text ?: @"Long Press to Edit";
+  _textLabel.text = _hexagon.text ?: @"Tap to Add Text";
   _editBox.text = _hexagon.text;
 }
 
