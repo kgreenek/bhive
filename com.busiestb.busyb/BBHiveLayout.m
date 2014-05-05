@@ -54,22 +54,17 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 #pragma mark Overriden Methods
 
 - (void)prepareLayout {
-  NSMutableDictionary *layoutInfo = [NSMutableDictionary dictionary];
   NSMutableDictionary *cellLayoutInfo = [NSMutableDictionary dictionary];
-  NSInteger sectionCount = [self.collectionView numberOfSections];
-  NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
-  for (NSInteger section = 0; section < sectionCount; ++section) {
-    NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
-    for (NSInteger item = 0; item < itemCount; item++) {
-      indexPath = [NSIndexPath indexPathForItem:item inSection:section];
+  for (NSInteger section = 0; section < [self.collectionView numberOfSections]; ++section) {
+    for (NSInteger item = 0; item < [self.collectionView numberOfItemsInSection:section]; item++) {
+      NSIndexPath *indexPath = [NSIndexPath indexPathForItem:item inSection:section];
       UICollectionViewLayoutAttributes *itemAttributes =
           [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
       itemAttributes.frame = [self frameForHexagonAtIndexpath:indexPath];
       cellLayoutInfo[indexPath] = itemAttributes;
     }
   }
-  layoutInfo[kHiveCellIdentifier] = cellLayoutInfo;
-  _layoutInfo = layoutInfo;
+  _layoutInfo = @{ kHiveCellIdentifier : cellLayoutInfo };
 }
 
 - (CGSize)collectionViewContentSize {
@@ -85,12 +80,18 @@ static const CGFloat kCellActiveHexagonPadding = 120;
     id cellInfoKey;
     while ((cellInfoKey = [cellLayoutInfoEnumerator nextObject])) {
       UICollectionViewLayoutAttributes *attrs = [cellLayoutInfo objectForKey:cellInfoKey];
-      if (attrs.frame.origin.x < minX) minX = attrs.frame.origin.x;
-      if (attrs.frame.origin.x + attrs.size.width > maxX)
+      if (attrs.frame.origin.x < minX) {
+        minX = attrs.frame.origin.x;
+      }
+      if (attrs.frame.origin.x + attrs.size.width > maxX) {
         maxX = attrs.frame.origin.x + attrs.size.width;
-      if (attrs.frame.origin.y < minY) minY = attrs.frame.origin.y;
-      if (attrs.frame.origin.y + attrs.size.height > maxY)
+      }
+      if (attrs.frame.origin.y < minY) {
+        minY = attrs.frame.origin.y;
+      }
+      if (attrs.frame.origin.y + attrs.size.height > maxY) {
         maxY = attrs.frame.origin.y + attrs.size.height;
+      }
     }
   }
   // We would expect to just return contentSize here, but if the contentSize is smaller than the
@@ -120,6 +121,10 @@ static const CGFloat kCellActiveHexagonPadding = 120;
     }];
   }];
   return attrs;
+}
+
+- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset {
+  return CGPointMake(0, 0);
 }
 
 #pragma mark Private Methods

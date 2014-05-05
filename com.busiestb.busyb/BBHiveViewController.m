@@ -251,6 +251,9 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   [_panningCell removeFromSuperview];
   _panningCell = nil;
   [self centerHiveCell].trashHidden = YES;
+  if (_panningCellIsNew) {
+    [self setActiveCellPath:indexPath];
+  }
 }
 
 - (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {
