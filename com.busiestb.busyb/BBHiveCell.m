@@ -95,10 +95,7 @@ static const CGFloat kHexagonHeight = 55;
 
 - (void)setHexagon:(BBHexagon *)hexagon {
   _hexagon = hexagon;
-  self.backgroundView = hexagon.type == kBBHexagonTypeCenter
-      ? [self centerHexagonImageView] : [self hexagonImageViewWithColor:hexagon.color];
-  _textLabel.text = hexagon.text ?: @"Long Press to Edit";
-  _editBox.text = hexagon.text;
+  [self update];
 }
 
 - (void)setActive:(BOOL)active {
@@ -132,6 +129,13 @@ static const CGFloat kHexagonHeight = 55;
 - (void)setTrashHidden:(BOOL)trashHidden {
   _trashHidden = trashHidden;
   _trashView.hidden = _trashHidden;
+}
+
+- (void)update {
+  self.backgroundView = _hexagon.type == kBBHexagonTypeCenter
+      ? [self centerHexagonImageView] : [self hexagonImageViewWithColor:_hexagon.color];
+  _textLabel.text = _hexagon.text ?: @"Long Press to Edit";
+  _editBox.text = _hexagon.text;
 }
 
 #pragma mark Overridden Methods

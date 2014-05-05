@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class BBHexagonEntity;
+
 typedef enum {
   kBBHexagonColorBlue,
   kBBHexagonColorGreen,
@@ -23,16 +25,18 @@ typedef enum {
   kBBHexagonTypeCenter,
 } BBHexagonType;
 
+// A wrapper around a BBHexagonEntity to make setting/getting properties easier.
 @interface BBHexagon : NSObject
 
-@property(nonatomic, readonly) CGPoint hexCoords;
-@property(nonatomic, readonly) BBHexagonType type;
-@property(nonatomic, readonly) BBHexagonColor color;
-@property(nonatomic, readonly) NSString *text;
+@property(nonatomic, readonly) BBHexagonEntity *entity;
+@property(nonatomic, assign) CGPoint hexCoords;
+@property(nonatomic, assign) BBHexagonType type;
+@property(nonatomic, assign) BBHexagonColor color;
+@property(nonatomic, copy) NSString *text;
 
-+ (BBHexagon *)cellHexagon;
-+ (BBHexagon *)centerHexagon;
-+ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords;
-+ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withText:(NSString *)text;
++ (instancetype)cellHexagonWithEntity:(BBHexagonEntity *)entity;
++ (instancetype)centerHexagonWithEntity:(BBHexagonEntity *)entity;
+
+- (instancetype)initWithEntity:(BBHexagonEntity *)entity;
 
 @end

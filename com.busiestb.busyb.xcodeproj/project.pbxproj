@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0AA3181619161B4D0088E98C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3181519161B4D0088E98C /* Images.xcassets */; };
+		0AA31818191714AD0088E98C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA31817191714AD0088E98C /* CoreData.framework */; };
+		0AA3181B191716930088E98C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0AA31819191716930088E98C /* Model.xcdatamodeld */; };
+		0AA3181E191717570088E98C /* BBHexagonEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA3181D191717570088E98C /* BBHexagonEntity.m */; };
 		E25BE94F18E8D8D400276890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE94E18E8D8D400276890 /* Foundation.framework */; };
 		E25BE95118E8D8D400276890 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95018E8D8D400276890 /* CoreGraphics.framework */; };
 		E25BE95318E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
@@ -37,6 +40,10 @@
 
 /* Begin PBXFileReference section */
 		0AA3181519161B4D0088E98C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		0AA31817191714AD0088E98C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0AA3181A191716930088E98C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		0AA3181C191717570088E98C /* BBHexagonEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHexagonEntity.h; sourceTree = "<group>"; };
+		0AA3181D191717570088E98C /* BBHexagonEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHexagonEntity.m; sourceTree = "<group>"; };
 		E25BE94B18E8D8D400276890 /* com.busiestb.busyb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = com.busiestb.busyb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E25BE94E18E8D8D400276890 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E25BE95018E8D8D400276890 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -67,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AA31818191714AD0088E98C /* CoreData.framework in Frameworks */,
 				E25BE95118E8D8D400276890 /* CoreGraphics.framework in Frameworks */,
 				E25BE95318E8D8D400276890 /* UIKit.framework in Frameworks */,
 				E25BE94F18E8D8D400276890 /* Foundation.framework in Frameworks */,
@@ -108,6 +116,7 @@
 		E25BE94D18E8D8D400276890 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0AA31817191714AD0088E98C /* CoreData.framework */,
 				E25BE94E18E8D8D400276890 /* Foundation.framework */,
 				E25BE95018E8D8D400276890 /* CoreGraphics.framework */,
 				E25BE95218E8D8D400276890 /* UIKit.framework */,
@@ -127,6 +136,9 @@
 				E25BE95518E8D8D400276890 /* Supporting Files */,
 				E25BE97D18E8D97C00276890 /* BBHiveViewController.h */,
 				E25BE97E18E8D97C00276890 /* BBHiveViewController.m */,
+				0AA31819191716930088E98C /* Model.xcdatamodeld */,
+				0AA3181C191717570088E98C /* BBHexagonEntity.h */,
+				0AA3181D191717570088E98C /* BBHexagonEntity.m */,
 				E25BE98018E8DA2C00276890 /* BBHiveLayout.h */,
 				E25BE98118E8DA2C00276890 /* BBHiveLayout.m */,
 				E25BE98318E8DAF000276890 /* BBHiveCell.h */,
@@ -264,8 +276,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E25BE98A18E9367A00276890 /* BBHexagon.m in Sources */,
+				0AA3181E191717570088E98C /* BBHexagonEntity.m in Sources */,
 				E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */,
 				E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */,
+				0AA3181B191716930088E98C /* Model.xcdatamodeld in Sources */,
 				E25BE97F18E8D97C00276890 /* BBHiveViewController.m in Sources */,
 				E25BE95F18E8D8D400276890 /* BBAppDelegate.m in Sources */,
 				E25BE95B18E8D8D400276890 /* main.m in Sources */,
@@ -485,6 +499,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0AA31819191716930088E98C /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0AA3181A191716930088E98C /* Model.xcdatamodel */,
+			);
+			currentVersion = 0AA3181A191716930088E98C /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E25BE94318E8D8D400276890 /* Project object */;
 }

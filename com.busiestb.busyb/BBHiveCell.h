@@ -27,6 +27,9 @@
 @property(nonatomic, readonly) NSString *editBoxText;
 @property(nonatomic, assign, getter=isTrashHidden) BOOL trashHidden;
 
+// Updates the view from hexagon. Call this whenever hexagon changes.
+- (void)update;
+
 - (void)addDidPanTarget:(id)target action:(SEL)action;
 - (void)addDidLongPressTarget:(id)target action:(SEL)action;
 

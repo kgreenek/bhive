@@ -8,48 +8,68 @@
 
 #import "BBHexagon.h"
 
+#import "BBHexagonEntity.h"
+
 @implementation BBHexagon
 
-- (instancetype)initWithHexCoords:(CGPoint)hexCoords
-                             type:(BBHexagonType)type
-                            color:(BBHexagonColor)color
-                             text:(NSString *)text {
+- (instancetype)initWithEntity:(BBHexagonEntity *)entity {
   self = [super init];
   if (self) {
-    _hexCoords = hexCoords;
-    _type = type;
-    _color = color;
-    _text = [text copy];
+    _entity = entity;
   }
   return self;
 }
 
-+ (BBHexagon *)cellHexagon {
-  return [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
-                                         type:kBBHexagonTypeCell
-                                        color:[self.class randomHexagonColor]
-                                         text:nil];
++ (instancetype)cellHexagonWithEntity:(BBHexagonEntity *)entity {
+  BBHexagon *hexagon = [[BBHexagon alloc] initWithEntity:entity];
+  hexagon.type = kBBHexagonTypeCell;
+  hexagon.hexCoords = CGPointMake(0, 0);
+  hexagon.color = [BBHexagon randomHexagonColor];
+  hexagon.text = nil;
+  return hexagon;
 }
 
-+ (BBHexagon *)centerHexagon {
-  return [[BBHexagon alloc] initWithHexCoords:CGPointMake(0, 0)
-                                         type:kBBHexagonTypeCenter
-                                        color:kBBHexagonColorBlue
-                                         text:nil];
++ (instancetype)centerHexagonWithEntity:(BBHexagonEntity *)entity {
+  BBHexagon *hexagon = [[BBHexagon alloc] initWithEntity:entity];
+  hexagon.type = kBBHexagonTypeCenter;
+  hexagon.hexCoords = CGPointMake(0, 0);
+  // The color isn't used for center hexagons.
+  hexagon.color = kBBHexagonColorBlue;
+  hexagon.text = nil;
+  return hexagon;
 }
 
-+ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withHexCoords:(CGPoint)hexCoords {
-  return [[BBHexagon alloc] initWithHexCoords:hexCoords
-                                         type:hexagon.type
-                                        color:hexagon.color
-                                         text:hexagon.text];
+- (CGPoint)hexCoords {
+  return CGPointMake([_entity.hexCoordsX floatValue], [_entity.hexCoordsY floatValue]);
 }
 
-+ (BBHexagon *)hexagonfromHexagon:(BBHexagon *)hexagon withText:(NSString *)text {
-  return [[BBHexagon alloc] initWithHexCoords:hexagon.hexCoords
-                                         type:hexagon.type
-                                        color:hexagon.color
-                                         text:text];
+- (void)setHexCoords:(CGPoint)hexCoords {
+  _entity.hexCoordsX = @( hexCoords.x );
+  _entity.hexCoordsY = @( hexCoords.y );
+}
+
+- (BBHexagonType)type {
+  return [_entity.type intValue];
+}
+
+- (void)setType:(BBHexagonType)type {
+  _entity.type = @( type );
+}
+
+- (BBHexagonColor)color {
+  return [_entity.color intValue];
+}
+
+- (void)setColor:(BBHexagonColor)color {
+  _entity.color = @( color );
+}
+
+- (NSString *)text {
+  return _entity.text;
+}
+
+- (void)setText:(NSString *)text {
+  _entity.text = [text copy];
 }
 
 #pragma mark Private Methods

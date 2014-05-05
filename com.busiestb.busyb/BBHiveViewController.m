@@ -8,11 +8,15 @@
 
 #import "BBHiveViewController.h"
 
+#import <CoreData/CoreData.h>
+
 #import "BBHexagon.h"
+#import "BBHexagonEntity.h"
 #import "BBHiveCell.h"
 #import "BBHiveLayout.h"
 
-static NSString * kHiveCellIdentifier = @"HiveCell";
+static NSString * const kHiveCellIdentifier = @"HiveCell";
+static NSString * const kHexagonEntityName = @"Hexagon";
 
 @interface BBHiveViewController ()<UICollectionViewDataSource,
                                    UICollectionViewDelegate,
@@ -21,13 +25,14 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 @end
 
 @implementation BBHiveViewController {
-  NSMutableArray *_sections;
+  NSMutableArray *_hexagons;
   UICollectionView *_hiveCollectionView;
   UITapGestureRecognizer *_backgroundTapRecognizer;
   NSIndexPath *_activeCellPath;
   BBHiveCell *_panningCell;
   BOOL _panningCellIsNew;
   BBHiveLayout *_hiveLayout;
+  NSManagedObjectContext *_managedObjectContext;
 }
 
 - (void)dealloc {
@@ -57,22 +62,20 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  NSMutableArray *cells = [NSMutableArray array];
-  [cells addObject:[BBHexagon centerHexagon]];
-  _sections = [NSMutableArray array];
-  [_sections addObject:cells];
+  [self setupManagedObjectContext];
+  [self setupHexagons];
   [_hiveCollectionView reloadData];
 }
 
 #pragma mark UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-  return [_sections count];
+  return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView
      numberOfItemsInSection:(NSInteger)section {
-  return [_sections[section] count];
+  return [_hexagons count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
@@ -113,17 +116,15 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 #pragma mark BBHiveCellDelegate
 
 - (void)didFinishEditingCell:(BBHiveCell *)cell {
-  NSUInteger index = [_sections[0] indexOfObject:cell.hexagon];
-  BBHexagon *hexagon = [BBHexagon hexagonfromHexagon:cell.hexagon
-                                            withText:cell.editBoxText];
-  _sections[0][index] = hexagon;
-  cell.hexagon = hexagon;
+  cell.hexagon.text = cell.editBoxText;
+  [cell update];
+  [_managedObjectContext save:NULL];
 }
 
 #pragma mark Private Methods
 
 - (BBHexagon *)hexagonForIndexPath:(NSIndexPath *)indexPath {
-  return _sections[indexPath.section][indexPath.item];
+  return _hexagons[indexPath.item];
 }
 
 - (void)setActiveCellPath:(NSIndexPath *)activeCellPath {
@@ -158,7 +159,7 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 
 - (void)didLongPressHexagon:(UILongPressGestureRecognizer *)recognizer {
   BBHiveCell *cell = (BBHiveCell *)recognizer.view;
-  NSUInteger item = [_sections[0] indexOfObject:cell.hexagon];
+  NSUInteger item = [_hexagons indexOfObject:cell.hexagon];
   if (item == _activeCellPath.item) {
     cell.editing = YES;
   }
@@ -188,18 +189,18 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   _panningCell = [[BBHiveCell alloc] init];
   BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
   if (hexagon.type == kBBHexagonTypeCell) {
-    NSUInteger item = [_sections[0] indexOfObject:hexagon];
-    [_sections[0] removeObject:hexagon];
-    [UIView animateWithDuration:0 animations:^{
-      [_hiveCollectionView performBatchUpdates:^{
-        [_hiveCollectionView deleteItemsAtIndexPaths:
-            @[ [NSIndexPath indexPathForItem:item inSection:0] ]];
-      } completion:nil];
-    }];
+    NSUInteger item = [_hexagons indexOfObject:hexagon];
+    [_hexagons removeObject:hexagon];
+    // Wrap this in an animation block with 0 duration to disable the shitty fade-out animation.
+    [UIView animateWithDuration:0
+        animations:^{
+          [_hiveCollectionView deleteItemsAtIndexPaths:
+              @[ [NSIndexPath indexPathForItem:item inSection:0] ]];
+        }];
     _panningCell.hexagon = hexagon;
     _panningCellIsNew = NO;
   } else {
-    _panningCell.hexagon = [BBHexagon cellHexagon];
+    _panningCell.hexagon = [self newCellHexagon];
     _panningCellIsNew = YES;
   }
   CGSize size = [_panningCell sizeThatFits:CGSizeZero];
@@ -212,7 +213,6 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
   CGPoint location = [recognizer locationInView:recognizer.view.superview];
   CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
   CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
-  BBHexagon *hexagon;
   CGRect hexagonFrame = [_hiveLayout frameForHexagonAtHexCoords:hexCoords];
   BOOL offscreen = !CGRectContainsRect(_hiveCollectionView.bounds, hexagonFrame);
   BBHexagon *overlappingHexagon = [self hexagonAtHexCoords:hexCoords];
@@ -233,28 +233,29 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
             _panningCell = nil;
             [self centerHiveCell].trashHidden = YES;
           }];
+      [_managedObjectContext deleteObject:_panningCell.hexagon.entity];
+      [_managedObjectContext save:NULL];
       return;
     }
-    hexagon = _panningCell.hexagon;
   } else {
-    hexagon = [BBHexagon hexagonfromHexagon:_panningCell.hexagon withHexCoords:hexCoords];
+    _panningCell.hexagon.hexCoords = hexCoords;
+    [_managedObjectContext save:NULL];
   }
-  [_panningCell removeFromSuperview];
-  _panningCell = nil;
-  [_sections[0] addObject:hexagon];
-  NSIndexPath *indexPath =
-      [NSIndexPath indexPathForItem:[_sections[0] count] - 1 inSection:0];
+  [_hexagons addObject:_panningCell.hexagon];
+  NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[_hexagons count] - 1 inSection:0];
   // Wrap this in an animation block with 0 duration to disable the shitty fade-in animation.
   [UIView animateWithDuration:0
       animations:^{
         [_hiveCollectionView insertItemsAtIndexPaths:@[ indexPath ]];
       }];
+  [_panningCell removeFromSuperview];
+  _panningCell = nil;
   [self centerHiveCell].trashHidden = YES;
 }
 
 - (BBHexagon *)hexagonAtHexCoords:(CGPoint)hexCoords {
   // TODO: Optimize this. Blech.
-  for (BBHexagon *hexagon in _sections[0]) {
+  for (BBHexagon *hexagon in _hexagons) {
     if (hexagon.hexCoords.x == hexCoords.x && hexagon.hexCoords.y == hexCoords.y) {
       return hexagon;
     }
@@ -265,6 +266,62 @@ static NSString * kHiveCellIdentifier = @"HiveCell";
 - (BBHiveCell *)centerHiveCell {
   return (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:
       [NSIndexPath indexPathForItem:0 inSection:0]];
+}
+
+- (void)setupManagedObjectContext {
+  NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+  NSURL *url = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
+                                                      inDomains:NSUserDomainMask][0];
+  url = [url URLByAppendingPathComponent:@"hexagons.sqlite"];
+  _managedObjectContext =
+       [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+  _managedObjectContext.persistentStoreCoordinator =
+      [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+  NSError* error;
+  [_managedObjectContext.persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                                 configuration:nil
+                                                                           URL:url
+                                                                       options:nil
+                                                                         error:&error];
+  if (error) {
+    NSLog(@"ERROR: Could not setup NSManagedObjectContext %@", error);
+  }
+}
+
+- (void)setupHexagons {
+  _hexagons = [NSMutableArray array];
+  NSArray *hexagonEntities = [self allHexagons];
+  if (![hexagonEntities count]) {
+    [_hexagons addObject:[self newCenterHexagon]];
+    [_managedObjectContext save:NULL];
+  } else {
+    for (BBHexagonEntity *entity in hexagonEntities) {
+      [_hexagons addObject:[[BBHexagon alloc] initWithEntity:entity]];
+    }
+  }
+}
+
+- (NSArray *)allHexagons {
+  NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kHexagonEntityName];
+  return [_managedObjectContext executeFetchRequest:request error:NULL];
+}
+
+- (BBHexagon *)newCenterHexagon {
+  BBHexagonEntity *hexagonEntity =
+      [NSEntityDescription insertNewObjectForEntityForName:kHexagonEntityName
+                                    inManagedObjectContext:_managedObjectContext];
+  return [BBHexagon centerHexagonWithEntity:hexagonEntity];
+}
+
+- (BBHexagon *)newCellHexagon {
+  BBHexagonEntity *hexagonEntity =
+      [NSEntityDescription insertNewObjectForEntityForName:kHexagonEntityName
+                                    inManagedObjectContext:_managedObjectContext];
+  return [BBHexagon cellHexagonWithEntity:hexagonEntity];
+}
+
++ (BBHexagonColor)randomHexagonColor {
+  return arc4random() % kBBHexagonColorNumColors;
 }
 
 @end
