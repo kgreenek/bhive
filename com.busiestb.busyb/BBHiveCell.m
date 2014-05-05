@@ -61,6 +61,7 @@ static const CGFloat kHexagonHeight = 55;
     [self addGestureRecognizer:_panRecognizer];
 
     _longPressRecognizer = [[UILongPressGestureRecognizer alloc] init];
+    _longPressRecognizer.enabled = NO;
     [self addGestureRecognizer:_longPressRecognizer];
   }
   return self;
@@ -104,6 +105,7 @@ static const CGFloat kHexagonHeight = 55;
     self.editing = NO;
   }
   _textLabel.alpha = active && !_editing ? 1 : 0;
+  _longPressRecognizer.enabled = _active;
 }
 
 - (void)setEditing:(BOOL)editing {

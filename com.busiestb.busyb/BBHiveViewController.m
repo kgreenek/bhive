@@ -160,7 +160,7 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 - (void)didLongPressHexagon:(UILongPressGestureRecognizer *)recognizer {
   BBHiveCell *cell = (BBHiveCell *)recognizer.view;
   NSUInteger item = [_hexagons indexOfObject:cell.hexagon];
-  if (item == _activeCellPath.item) {
+  if (_activeCellPath && item == _activeCellPath.item) {
     cell.editing = YES;
   }
 }
