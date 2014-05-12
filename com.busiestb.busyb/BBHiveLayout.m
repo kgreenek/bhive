@@ -17,22 +17,36 @@ static const CGFloat kHexagonPointHeight = 14;
 static const CGFloat kDefaultHexagonPadding = 2;
 static const CGFloat kCellActiveHexagonPadding = 120;
 
+@interface BBHiveLayout ()
+
+// The active size is the view's size that doesn't overlap with the keyboard.
+@property(nonatomic, readonly) CGSize activeSize;
+
+@end
+
 @implementation BBHiveLayout {
   CGFloat _hexagonPadding;
   NSDictionary *_layoutInfo;
   NSIndexPath *_activeCellIndexPath;
+  CGSize _keyboardSize;
 }
 
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
-                  activeCellPath:(NSIndexPath *)activeCellIndexPath {
+                  activeCellPath:(NSIndexPath *)activeCellIndexPath
+                    keyboardSize:(CGSize)keyboardSize {
   self = [super init];
   if (self) {
     _delegate = delegate;
     _hexagonPadding = (activeCellIndexPath == nil)
         ? kDefaultHexagonPadding : kCellActiveHexagonPadding;
     _activeCellIndexPath = activeCellIndexPath;
+    _keyboardSize = keyboardSize;
   }
   return self;
+}
+
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords {
@@ -61,6 +75,10 @@ static const CGFloat kCellActiveHexagonPadding = 120;
       UICollectionViewLayoutAttributes *itemAttributes =
           [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
       itemAttributes.frame = [self frameForHexagonAtIndexpath:indexPath];
+      itemAttributes.zIndex = [indexPath isEqual:_activeCellIndexPath] ? 1 : 0;
+      // A new zIndex doesn't get set until a view is recycled when we transition from one layout
+      // to another, so we have to fake it with this transform in the z direction.
+      itemAttributes.transform3D = CATransform3DMakeTranslation(0, 0, itemAttributes.zIndex);
       cellLayoutInfo[indexPath] = itemAttributes;
     }
   }
@@ -132,8 +150,8 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 - (CGRect)frameForHexagonAtIndexpath:(NSIndexPath *)indexPath {
   if ([indexPath isEqual:_activeCellIndexPath]) {
     // Center the active hexagon.
-    return CGRectMake(self.collectionView.frame.size.width / 2 - kActiveHexagonWidth / 2,
-                      self.collectionView.frame.size.height / 2 - kActiveHexagonHeight / 2,
+    return CGRectMake(self.activeSize.width / 2 - kActiveHexagonWidth / 2,
+                      self.activeSize.height / 2 - kActiveHexagonHeight / 2,
                       kActiveHexagonWidth,
                       kActiveHexagonHeight);
   }
@@ -162,6 +180,12 @@ static const CGFloat kCellActiveHexagonPadding = 120;
       + (hexCoords.y * _hexagonPadding / 2);
   CGFloat y = (kHexagonHeight - kHexagonPointHeight + _hexagonPadding) * hexCoords.y;
   return CGPointMake(-x, -y);
+}
+
+- (CGSize)activeSize {
+  // NOTE: This assumes that the collection view occupies the full screen.
+  return CGSizeMake(self.collectionView.frame.size.width,
+                    self.collectionView.frame.size.height - _keyboardSize.height);
 }
 
 @end

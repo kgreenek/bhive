@@ -19,7 +19,8 @@
 @property(nonatomic, weak) id<BBHiveLayoutDelegate> delegate;
 
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
-                  activeCellPath:(NSIndexPath *)activeCellIndexPath;
+                  activeCellPath:(NSIndexPath *)activeCellIndexPath
+                    keyboardSize:(CGSize)keyboardSize;
 
 - (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords;
 - (CGRect)frameForHexagonAtHexCoords:(CGPoint)hexCoords;

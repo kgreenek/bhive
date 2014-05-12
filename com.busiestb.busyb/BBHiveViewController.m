@@ -33,6 +33,23 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   BOOL _panningCellIsNew;
   BBHiveLayout *_hiveLayout;
   NSManagedObjectContext *_managedObjectContext;
+  CGSize _keyboardSize;
+}
+
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    _keyboardSize = CGSizeZero;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+  }
+  return self;
 }
 
 - (void)dealloc {
@@ -40,7 +57,9 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 }
 
 - (void)loadView {
-  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCellPath:nil];
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
+                                        activeCellPath:nil
+                                          keyboardSize:_keyboardSize];
   _hiveCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero
                                            collectionViewLayout:_hiveLayout];
   _hiveCollectionView.scrollEnabled = NO;
@@ -138,7 +157,9 @@ static NSString * const kHexagonEntityName = @"Hexagon";
       (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
   previousActiveCell.editing = NO;
   _activeCellPath = activeCellPath;
-  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self activeCellPath:activeCellPath];
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
+                                        activeCellPath:activeCellPath
+                                          keyboardSize:_keyboardSize];
   BBHiveCell *activeCell =
       (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
   previousActiveCell.active = NO;
@@ -324,6 +345,22 @@ static NSString * const kHexagonEntityName = @"Hexagon";
       [NSEntityDescription insertNewObjectForEntityForName:kHexagonEntityName
                                     inManagedObjectContext:_managedObjectContext];
   return [BBHexagon cellHexagonWithEntity:hexagonEntity];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+  CGSize keyboardSize =
+    [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
+                                        activeCellPath:_activeCellPath
+                                          keyboardSize:keyboardSize];
+  [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+  _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
+                                        activeCellPath:_activeCellPath
+                                          keyboardSize:CGSizeZero];
+  [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
 }
 
 + (BBHexagonColor)randomHexagonColor {
