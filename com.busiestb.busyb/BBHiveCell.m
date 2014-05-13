@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #import "BBHexagon.h"
+#import "UIView+ColorOfPoint.h"
 
 static const CGFloat kHexagonWidth = 48;
 static const CGFloat kHexagonHeight = 55;
@@ -145,6 +146,13 @@ static const CGFloat kHexagonHeight = 55;
 - (void)prepareForReuse {
   [_panRecognizer removeTarget:nil action:NULL];
   [_longPressRecognizer removeTarget:nil action:NULL];
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+  if ([self alphaOfPoint:point] < 0.01) {
+    return nil;
+  }
+  return self;
 }
 
 #pragma mark Action Targets
