@@ -3,7 +3,7 @@
     {
       "idiom" : "iphone",
       "scale" : "1x",
-      "filename" : "background-iphone.png"
+      "filename" : "background-iphone3.png"
     },
     {
       "idiom" : "iphone",
@@ -24,7 +24,7 @@
     {
       "idiom" : "ipad",
       "scale" : "2x",
-      "filename" : "background-ipad@2x.png"
+      "filename" : "background-ipad-retina.png"
     }
   ],
   "info" : {

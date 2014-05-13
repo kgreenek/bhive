@@ -50,8 +50,8 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 }
 
 - (CGPoint)nearestHexCoordsFromScreenCoords:(CGPoint)screenCoords {
-  screenCoords.x -= self.collectionView.frame.size.width / 2;
-  screenCoords.y -= self.collectionView.frame.size.height / 2;
+  screenCoords.x -= self.collectionView.bounds.size.width / 2;
+  screenCoords.y -= self.collectionView.bounds.size.height / 2;
   CGFloat y = roundf(screenCoords.y / (kHexagonHeight - kHexagonPointHeight + _hexagonPadding));
   CGFloat x = roundf(screenCoords.x / (kHexagonWidth + _hexagonPadding) - y / 2);
   return CGPointMake(x, y);
@@ -116,7 +116,7 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   // collectionView's frame, the contentOffset gets borked by an Apple bug. As a workaround,
   // always make sure the returned contentSize is at least as big as the collectionView frame.
   CGSize contentSize = CGSizeMake(maxX - minX, maxY - minY);
-  CGRect collectionViewFrame = self.collectionView.frame;
+  CGRect collectionViewFrame = self.collectionView.bounds;
   return CGSizeMake(fmaxf(contentSize.width, CGRectGetWidth(collectionViewFrame)),
                     fmaxf(contentSize.height, CGRectGetHeight(collectionViewFrame)));
 }
@@ -145,6 +145,10 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   return CGPointMake(0, 0);
 }
 
+- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
+  return YES;
+}
+
 #pragma mark Private Methods
 
 - (CGRect)frameForHexagonAtIndexpath:(NSIndexPath *)indexPath {
@@ -163,9 +167,9 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   CGFloat x = ((_hexagonPadding + kHexagonWidth) * hexCoords.x)
       + (hexCoords.y * kHexagonWidth / 2)
       + (hexCoords.y * _hexagonPadding / 2)
-      + self.collectionView.frame.size.width / 2 - kHexagonWidth / 2;
+      + self.collectionView.bounds.size.width / 2 - kHexagonWidth / 2;
   CGFloat y = (kHexagonHeight - kHexagonPointHeight + _hexagonPadding) * hexCoords.y
-      + self.collectionView.frame.size.height / 2 - kHexagonHeight / 2;
+      + self.collectionView.bounds.size.height / 2 - kHexagonHeight / 2;
   return CGPointMake(x, y);
 }
 
@@ -184,8 +188,8 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 
 - (CGSize)activeSize {
   // NOTE: This assumes that the collection view occupies the full screen.
-  return CGSizeMake(self.collectionView.frame.size.width,
-                    self.collectionView.frame.size.height - _keyboardSize.height);
+  return CGSizeMake(self.collectionView.bounds.size.width,
+                    self.collectionView.bounds.size.height - _keyboardSize.height);
 }
 
 @end

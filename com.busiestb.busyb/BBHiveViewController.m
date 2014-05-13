@@ -48,6 +48,9 @@ static NSString * const kHexagonEntityName = @"Hexagon";
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    _backgroundTapRecognizer =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(didTapBackground)];
   }
   return self;
 }
@@ -69,13 +72,7 @@ static NSString * const kHexagonEntityName = @"Hexagon";
           forCellWithReuseIdentifier:kHiveCellIdentifier];
   _hiveCollectionView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-  _hiveCollectionView.backgroundView =
-      [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]];
-  _hiveCollectionView.backgroundView.userInteractionEnabled = YES;
-  _backgroundTapRecognizer =
-      [[UITapGestureRecognizer alloc] initWithTarget:self
-                                              action:@selector(didTapBackground)];
-  [_hiveCollectionView.backgroundView addGestureRecognizer:_backgroundTapRecognizer];
+  [self setBackgoundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]]];
   self.view = _hiveCollectionView;
 }
 
@@ -84,6 +81,18 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   [self setupManagedObjectContext];
   [self setupHexagons];
   [_hiveCollectionView reloadData];
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                duration:(NSTimeInterval)duration {
+  // We only allow rotation on iPad, so it's ok to just use the iPad image assets here.
+  if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+    [self setBackgoundView:
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg-landscape"]]];
+  } else {
+    [self setBackgoundView:
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]]];
+  }
 }
 
 #pragma mark UICollectionViewDataSource
@@ -348,11 +357,16 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
-  CGSize keyboardSize =
-    [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+  // The notification gives us the frame w.r.t. the window. However, the window is always in
+  // portrait and contains transforms. We must convert it w.r.t. the view's frame or the height
+  // and width will be swapped when in landscape.
+  CGRect keyboardFrameInWindow =
+      [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+  CGRect keyboardFrame = [_hiveCollectionView convertRect:keyboardFrameInWindow
+                                                 fromView:_hiveCollectionView.window];
   _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
                                         activeCellPath:_activeCellPath
-                                          keyboardSize:keyboardSize];
+                                          keyboardSize:keyboardFrame.size];
   [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
 }
 
@@ -361,6 +375,14 @@ static NSString * const kHexagonEntityName = @"Hexagon";
                                         activeCellPath:_activeCellPath
                                           keyboardSize:CGSizeZero];
   [_hiveCollectionView setCollectionViewLayout:_hiveLayout animated:YES];
+}
+
+- (void)setBackgoundView:(UIView *)backgroundView {
+  [_hiveCollectionView.backgroundView removeFromSuperview];
+  [_hiveCollectionView.backgroundView removeGestureRecognizer:_backgroundTapRecognizer];
+  _hiveCollectionView.backgroundView = backgroundView;
+  _hiveCollectionView.backgroundView.userInteractionEnabled = YES;
+  [_hiveCollectionView.backgroundView addGestureRecognizer:_backgroundTapRecognizer];
 }
 
 + (BBHexagonColor)randomHexagonColor {
