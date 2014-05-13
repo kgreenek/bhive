@@ -29,6 +29,7 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   NSDictionary *_layoutInfo;
   NSIndexPath *_activeCellIndexPath;
   CGSize _keyboardSize;
+  BOOL _animatingBoundsChange;
 }
 
 - (instancetype)initWithDelegate:(id<BBHiveLayoutDelegate>)delegate
@@ -147,6 +148,35 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
   return YES;
+}
+
+- (void)prepareForAnimatedBoundsChange:(CGRect)oldBounds {
+  [super prepareForAnimatedBoundsChange:oldBounds];
+  _animatingBoundsChange = YES;
+}
+
+- (void)finalizeAnimatedBoundsChange {
+  [super finalizeAnimatedBoundsChange];
+  _animatingBoundsChange = NO;
+}
+
+- (UICollectionViewLayoutAttributes *)
+    initialLayoutAttributesForAppearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
+  if (_animatingBoundsChange) {
+    // If the view is rotating, appearing items should animate from their current attributes
+    // (specify 'nil').
+    return nil;
+  }
+  return [super initialLayoutAttributesForAppearingItemAtIndexPath:itemIndexPath];
+}
+
+- (UICollectionViewLayoutAttributes *)
+    finalLayoutAttributesForDisappearingItemAtIndexPath:(NSIndexPath *)itemIndexPath {
+  if (_animatingBoundsChange) {
+    // If the view is rotating, disappearing items should animate to their new attributes.
+    return [self layoutAttributesForItemAtIndexPath:itemIndexPath];
+  }
+  return [super finalLayoutAttributesForDisappearingItemAtIndexPath:itemIndexPath];
 }
 
 #pragma mark Private Methods
