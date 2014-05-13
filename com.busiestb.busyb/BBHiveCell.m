@@ -152,7 +152,7 @@ static const CGFloat kHexagonHeight = 55;
   if ([self alphaOfPoint:point] < 0.01) {
     return nil;
   }
-  return self;
+  return [super hitTest:point withEvent:event];
 }
 
 #pragma mark Action Targets
