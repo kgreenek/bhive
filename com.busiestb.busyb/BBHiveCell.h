@@ -31,9 +31,6 @@
 - (void)update;
 
 - (void)addDidPanTarget:(id)target action:(SEL)action;
-- (void)addDidLongPressTarget:(id)target action:(SEL)action;
-
 - (void)removeDidPanTarget:(id)target action:(SEL)action;
-- (void)removeDidLongPressTarget:(id)target action:(SEL)action;
 
 @end

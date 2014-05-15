@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 
+#import "BBImmediatePanGestureRecognizer.h"
 #import "BBHexagon.h"
 #import "UIView+ColorOfPoint.h"
 
@@ -21,8 +22,7 @@ static const CGFloat kHexagonHeight = 55;
   UIView *_editBoxBackground;
   UILabel *_textLabel;
   UIImageView *_trashView;
-  UIPanGestureRecognizer *_panRecognizer;
-  UILongPressGestureRecognizer *_longPressRecognizer;
+  BBImmediatePanGestureRecognizer *_panRecognizer;
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -57,13 +57,9 @@ static const CGFloat kHexagonHeight = 55;
     _trashView.hidden = _trashHidden;
     [self addSubview:_trashView];
 
-    _panRecognizer = [[UIPanGestureRecognizer alloc] init];
+    _panRecognizer = [[BBImmediatePanGestureRecognizer alloc] init];
     _panRecognizer.maximumNumberOfTouches = 1;
     [self addGestureRecognizer:_panRecognizer];
-
-    _longPressRecognizer = [[UILongPressGestureRecognizer alloc] init];
-    _longPressRecognizer.enabled = NO;
-    [self addGestureRecognizer:_longPressRecognizer];
   }
   return self;
 }
@@ -106,7 +102,6 @@ static const CGFloat kHexagonHeight = 55;
     self.editing = NO;
   }
   _textLabel.alpha = active && !_editing ? 1 : 0;
-  _longPressRecognizer.enabled = _active;
 }
 
 - (void)setEditing:(BOOL)editing {
@@ -139,13 +134,13 @@ static const CGFloat kHexagonHeight = 55;
       ? [self centerHexagonImageView] : [self hexagonImageViewWithColor:_hexagon.color];
   _textLabel.text = _hexagon.text ?: @"Tap to Add Text";
   _editBox.text = _hexagon.text;
+  _panRecognizer.delay = _hexagon.type == kBBHexagonTypeCenter ? 0 : 0.2;
 }
 
 #pragma mark Overridden Methods
 
 - (void)prepareForReuse {
   [_panRecognizer removeTarget:nil action:NULL];
-  [_longPressRecognizer removeTarget:nil action:NULL];
 }
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
@@ -161,16 +156,8 @@ static const CGFloat kHexagonHeight = 55;
   [_panRecognizer addTarget:target action:action];
 }
 
-- (void)addDidLongPressTarget:(id)target action:(SEL)action {
-  [_longPressRecognizer addTarget:target action:action];
-}
-
 - (void)removeDidPanTarget:(id)target action:(SEL)action {
   [_panRecognizer removeTarget:target action:action];
-}
-
-- (void)removeDidLongPressTarget:(id)target action:(SEL)action {
-  [_longPressRecognizer removeTarget:target action:action];
 }
 
 #pragma mark Private Methods

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A60C9761921FE4A00CFE5BA /* UIView+ColorOfPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A60C9751921FE4A00CFE5BA /* UIView+ColorOfPoint.m */; };
+		0A60C979192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A60C978192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m */; };
 		0AA31818191714AD0088E98C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AA31817191714AD0088E98C /* CoreData.framework */; };
 		0AA3181B191716930088E98C /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0AA31819191716930088E98C /* Model.xcdatamodeld */; };
 		0AA3181E191717570088E98C /* BBHexagonEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA3181D191717570088E98C /* BBHexagonEntity.m */; };
@@ -42,6 +43,8 @@
 /* Begin PBXFileReference section */
 		0A60C9741921FE4A00CFE5BA /* UIView+ColorOfPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ColorOfPoint.h"; sourceTree = "<group>"; };
 		0A60C9751921FE4A00CFE5BA /* UIView+ColorOfPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ColorOfPoint.m"; sourceTree = "<group>"; };
+		0A60C977192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBImmediatePanGestureRecognizer.h; sourceTree = "<group>"; };
+		0A60C978192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBImmediatePanGestureRecognizer.m; sourceTree = "<group>"; };
 		0AA31817191714AD0088E98C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0AA3181A191716930088E98C /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		0AA3181C191717570088E98C /* BBHexagonEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHexagonEntity.h; sourceTree = "<group>"; };
@@ -148,6 +151,8 @@
 				E25BE98418E8DAF000276890 /* BBHiveCell.m */,
 				0A60C9741921FE4A00CFE5BA /* UIView+ColorOfPoint.h */,
 				0A60C9751921FE4A00CFE5BA /* UIView+ColorOfPoint.m */,
+				0A60C977192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.h */,
+				0A60C978192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m */,
 			);
 			path = com.busiestb.busyb;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				0A60C9761921FE4A00CFE5BA /* UIView+ColorOfPoint.m in Sources */,
 				E25BE98A18E9367A00276890 /* BBHexagon.m in Sources */,
 				0AA3181E191717570088E98C /* BBHexagonEntity.m in Sources */,
+				0A60C979192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m in Sources */,
 				E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */,
 				E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */,
 				0AA3181B191716930088E98C /* Model.xcdatamodeld in Sources */,

@@ -113,7 +113,6 @@ static NSString * const kHexagonEntityName = @"Hexagon";
                                                      forIndexPath:indexPath];
   cell.hexagon = [self hexagonForIndexPath:indexPath];
   [cell addDidPanTarget:self action:@selector(didPanHexagon:)];
-  [cell addDidLongPressTarget:self action:@selector(didLongPressHexagon:)];
   cell.delegate = self;
   [cell sizeToFit];
   return cell;
