@@ -163,19 +163,24 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   }
   BBHiveCell *previousActiveCell =
       (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
-  previousActiveCell.editing = NO;
+  previousActiveCell.active = NO;
   _activeCellPath = activeCellPath;
   _hiveLayout = [[BBHiveLayout alloc] initWithDelegate:self
                                         activeCellPath:activeCellPath
                                           keyboardSize:_keyboardSize];
-  BBHiveCell *activeCell =
-      (BBHiveCell *)[_hiveCollectionView cellForItemAtIndexPath:_activeCellPath];
-  previousActiveCell.active = NO;
+  __weak BBHiveViewController *weakSelf = self;
   [_hiveCollectionView setCollectionViewLayout:_hiveLayout
       animated:YES
       completion:^(BOOL finished) {
-        // Wait to make the cell active so the animations don't interfere.
-        activeCell.active = YES;
+        if (finished) {
+          // Wait to make the cell active so the animations don't interfere.
+          BBHiveViewController *strongSelf = weakSelf;
+          if (strongSelf && strongSelf->_activeCellPath) {
+            BBHiveCell *activeCell = (BBHiveCell *)[strongSelf->_hiveCollectionView
+                cellForItemAtIndexPath:strongSelf->_activeCellPath];
+            activeCell.active = YES;
+          }
+        }
       }];
 }
 
@@ -186,14 +191,6 @@ static NSString * const kHexagonEntityName = @"Hexagon";
     activeCell.editing = NO;
   } else {
     [self setActiveCellPath:nil];
-  }
-}
-
-- (void)didLongPressHexagon:(UILongPressGestureRecognizer *)recognizer {
-  BBHiveCell *cell = (BBHiveCell *)recognizer.view;
-  NSUInteger item = [_hexagons indexOfObject:cell.hexagon];
-  if (_activeCellPath && item == _activeCellPath.item) {
-    cell.editing = YES;
   }
 }
 
