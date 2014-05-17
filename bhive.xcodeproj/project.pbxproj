@@ -23,7 +23,7 @@
 		E25BE96918E8D8D400276890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE94E18E8D8D400276890 /* Foundation.framework */; };
 		E25BE96A18E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
 		E25BE97218E8D8D400276890 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E25BE97018E8D8D400276890 /* InfoPlist.strings */; };
-		E25BE97418E8D8D400276890 /* bhiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97318E8D8D400276890 /* bhiveTests.m */; };
+		E25BE97418E8D8D400276890 /* BBHiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97318E8D8D400276890 /* BBHiveTests.m */; };
 		E25BE97F18E8D97C00276890 /* BBHiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97E18E8D97C00276890 /* BBHiveViewController.m */; };
 		E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98118E8DA2C00276890 /* BBHiveLayout.m */; };
 		E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98418E8DAF000276890 /* BBHiveCell.m */; };
@@ -64,7 +64,7 @@
 		E25BE96718E8D8D400276890 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E25BE96F18E8D8D400276890 /* bhiveTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "bhiveTests-Info.plist"; sourceTree = "<group>"; };
 		E25BE97118E8D8D400276890 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E25BE97318E8D8D400276890 /* bhiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bhiveTests.m; sourceTree = "<group>"; };
+		E25BE97318E8D8D400276890 /* BBHiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBHiveTests.m; sourceTree = "<group>"; };
 		E25BE97D18E8D97C00276890 /* BBHiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveViewController.h; sourceTree = "<group>"; };
 		E25BE97E18E8D97C00276890 /* BBHiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHiveViewController.m; sourceTree = "<group>"; };
 		E25BE98018E8DA2C00276890 /* BBHiveLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveLayout.h; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		E25BE96D18E8D8D400276890 /* TestSources */ = {
 			isa = PBXGroup;
 			children = (
-				E25BE97318E8D8D400276890 /* bhiveTests.m */,
+				E25BE97318E8D8D400276890 /* BBHiveTests.m */,
 				E25BE96E18E8D8D400276890 /* Supporting Files */,
 			);
 			path = TestSources;
@@ -302,7 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E25BE97418E8D8D400276890 /* bhiveTests.m in Sources */,
+				E25BE97418E8D8D400276890 /* BBHiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
