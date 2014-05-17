@@ -1,6 +1,6 @@
 //
-//  com_busiestb_busybTests.m
-//  com.busiestb.busybTests
+//  com.hexkvlt.bhiveTests.m
+//  com.hexkvlt.bhiveTests
 //
 //  Created by Kevin Greene on 3/30/14.
 //  Copyright (c) 2014 Kevin Greene. All rights reserved.

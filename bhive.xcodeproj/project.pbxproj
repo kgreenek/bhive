@@ -23,7 +23,7 @@
 		E25BE96918E8D8D400276890 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE94E18E8D8D400276890 /* Foundation.framework */; };
 		E25BE96A18E8D8D400276890 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E25BE95218E8D8D400276890 /* UIKit.framework */; };
 		E25BE97218E8D8D400276890 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E25BE97018E8D8D400276890 /* InfoPlist.strings */; };
-		E25BE97418E8D8D400276890 /* com_busiestb_busybTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97318E8D8D400276890 /* com_busiestb_busybTests.m */; };
+		E25BE97418E8D8D400276890 /* bhiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97318E8D8D400276890 /* bhiveTests.m */; };
 		E25BE97F18E8D97C00276890 /* BBHiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE97E18E8D97C00276890 /* BBHiveViewController.m */; };
 		E25BE98218E8DA2C00276890 /* BBHiveLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98118E8DA2C00276890 /* BBHiveLayout.m */; };
 		E25BE98518E8DAF000276890 /* BBHiveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E25BE98418E8DAF000276890 /* BBHiveCell.m */; };
@@ -50,21 +50,21 @@
 		0AA3181C191717570088E98C /* BBHexagonEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHexagonEntity.h; sourceTree = "<group>"; };
 		0AA3181D191717570088E98C /* BBHexagonEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHexagonEntity.m; sourceTree = "<group>"; };
 		0AA3182919208A9A0088E98C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E25BE94B18E8D8D400276890 /* com.busiestb.busyb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = com.busiestb.busyb.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25BE94B18E8D8D400276890 /* bhive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bhive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E25BE94E18E8D8D400276890 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E25BE95018E8D8D400276890 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E25BE95218E8D8D400276890 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		E25BE95618E8D8D400276890 /* com.busiestb.busyb-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.busiestb.busyb-Info.plist"; sourceTree = "<group>"; };
+		E25BE95618E8D8D400276890 /* bhive-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "bhive-Info.plist"; sourceTree = "<group>"; };
 		E25BE95818E8D8D400276890 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E25BE95A18E8D8D400276890 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E25BE95C18E8D8D400276890 /* com.busiestb.busyb-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "com.busiestb.busyb-Prefix.pch"; sourceTree = "<group>"; };
+		E25BE95C18E8D8D400276890 /* bhive-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bhive-Prefix.pch"; sourceTree = "<group>"; };
 		E25BE95D18E8D8D400276890 /* BBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBAppDelegate.h; sourceTree = "<group>"; };
 		E25BE95E18E8D8D400276890 /* BBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BBAppDelegate.m; sourceTree = "<group>"; };
-		E25BE96618E8D8D400276890 /* com.busiestb.busybTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = com.busiestb.busybTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E25BE96618E8D8D400276890 /* bhiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bhiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E25BE96718E8D8D400276890 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E25BE96F18E8D8D400276890 /* com.busiestb.busybTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.busiestb.busybTests-Info.plist"; sourceTree = "<group>"; };
+		E25BE96F18E8D8D400276890 /* bhiveTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "bhiveTests-Info.plist"; sourceTree = "<group>"; };
 		E25BE97118E8D8D400276890 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E25BE97318E8D8D400276890 /* com_busiestb_busybTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = com_busiestb_busybTests.m; sourceTree = "<group>"; };
+		E25BE97318E8D8D400276890 /* bhiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bhiveTests.m; sourceTree = "<group>"; };
 		E25BE97D18E8D97C00276890 /* BBHiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveViewController.h; sourceTree = "<group>"; };
 		E25BE97E18E8D97C00276890 /* BBHiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBHiveViewController.m; sourceTree = "<group>"; };
 		E25BE98018E8DA2C00276890 /* BBHiveLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBHiveLayout.h; sourceTree = "<group>"; };
@@ -103,8 +103,8 @@
 		E25BE94218E8D8D400276890 = {
 			isa = PBXGroup;
 			children = (
-				E25BE95418E8D8D400276890 /* com.busiestb.busyb */,
-				E25BE96D18E8D8D400276890 /* com.busiestb.busybTests */,
+				E25BE95418E8D8D400276890 /* Sources */,
+				E25BE96D18E8D8D400276890 /* TestSources */,
 				E25BE94D18E8D8D400276890 /* Frameworks */,
 				E25BE94C18E8D8D400276890 /* Products */,
 			);
@@ -113,8 +113,8 @@
 		E25BE94C18E8D8D400276890 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E25BE94B18E8D8D400276890 /* com.busiestb.busyb.app */,
-				E25BE96618E8D8D400276890 /* com.busiestb.busybTests.xctest */,
+				E25BE94B18E8D8D400276890 /* bhive.app */,
+				E25BE96618E8D8D400276890 /* bhiveTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E25BE95418E8D8D400276890 /* com.busiestb.busyb */ = {
+		E25BE95418E8D8D400276890 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				0AA3182919208A9A0088E98C /* Images.xcassets */,
@@ -154,33 +154,33 @@
 				0A60C977192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.h */,
 				0A60C978192470BA00CFE5BA /* BBImmediatePanGestureRecognizer.m */,
 			);
-			path = com.busiestb.busyb;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		E25BE95518E8D8D400276890 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E25BE95618E8D8D400276890 /* com.busiestb.busyb-Info.plist */,
+				E25BE95618E8D8D400276890 /* bhive-Info.plist */,
 				E25BE95718E8D8D400276890 /* InfoPlist.strings */,
 				E25BE95A18E8D8D400276890 /* main.m */,
-				E25BE95C18E8D8D400276890 /* com.busiestb.busyb-Prefix.pch */,
+				E25BE95C18E8D8D400276890 /* bhive-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E25BE96D18E8D8D400276890 /* com.busiestb.busybTests */ = {
+		E25BE96D18E8D8D400276890 /* TestSources */ = {
 			isa = PBXGroup;
 			children = (
-				E25BE97318E8D8D400276890 /* com_busiestb_busybTests.m */,
+				E25BE97318E8D8D400276890 /* bhiveTests.m */,
 				E25BE96E18E8D8D400276890 /* Supporting Files */,
 			);
-			path = com.busiestb.busybTests;
+			path = TestSources;
 			sourceTree = "<group>";
 		};
 		E25BE96E18E8D8D400276890 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E25BE96F18E8D8D400276890 /* com.busiestb.busybTests-Info.plist */,
+				E25BE96F18E8D8D400276890 /* bhiveTests-Info.plist */,
 				E25BE97018E8D8D400276890 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -189,9 +189,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E25BE94A18E8D8D400276890 /* com.busiestb.busyb */ = {
+		E25BE94A18E8D8D400276890 /* bhive */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E25BE97718E8D8D400276890 /* Build configuration list for PBXNativeTarget "com.busiestb.busyb" */;
+			buildConfigurationList = E25BE97718E8D8D400276890 /* Build configuration list for PBXNativeTarget "bhive" */;
 			buildPhases = (
 				E25BE94718E8D8D400276890 /* Sources */,
 				E25BE94818E8D8D400276890 /* Frameworks */,
@@ -201,14 +201,14 @@
 			);
 			dependencies = (
 			);
-			name = com.busiestb.busyb;
+			name = bhive;
 			productName = com.busiestb.busyb;
-			productReference = E25BE94B18E8D8D400276890 /* com.busiestb.busyb.app */;
+			productReference = E25BE94B18E8D8D400276890 /* bhive.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E25BE96518E8D8D400276890 /* com.busiestb.busybTests */ = {
+		E25BE96518E8D8D400276890 /* bhiveTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E25BE97A18E8D8D400276890 /* Build configuration list for PBXNativeTarget "com.busiestb.busybTests" */;
+			buildConfigurationList = E25BE97A18E8D8D400276890 /* Build configuration list for PBXNativeTarget "bhiveTests" */;
 			buildPhases = (
 				E25BE96218E8D8D400276890 /* Sources */,
 				E25BE96318E8D8D400276890 /* Frameworks */,
@@ -219,9 +219,9 @@
 			dependencies = (
 				E25BE96C18E8D8D400276890 /* PBXTargetDependency */,
 			);
-			name = com.busiestb.busybTests;
+			name = bhiveTests;
 			productName = com.busiestb.busybTests;
-			productReference = E25BE96618E8D8D400276890 /* com.busiestb.busybTests.xctest */;
+			productReference = E25BE96618E8D8D400276890 /* bhiveTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -242,7 +242,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E25BE94618E8D8D400276890 /* Build configuration list for PBXProject "com.busiestb.busyb" */;
+			buildConfigurationList = E25BE94618E8D8D400276890 /* Build configuration list for PBXProject "bhive" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -254,8 +254,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E25BE94A18E8D8D400276890 /* com.busiestb.busyb */,
-				E25BE96518E8D8D400276890 /* com.busiestb.busybTests */,
+				E25BE94A18E8D8D400276890 /* bhive */,
+				E25BE96518E8D8D400276890 /* bhiveTests */,
 			);
 		};
 /* End PBXProject section */
@@ -302,7 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E25BE97418E8D8D400276890 /* com_busiestb_busybTests.m in Sources */,
+				E25BE97418E8D8D400276890 /* bhiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,7 +311,7 @@
 /* Begin PBXTargetDependency section */
 		E25BE96C18E8D8D400276890 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E25BE94A18E8D8D400276890 /* com.busiestb.busyb */;
+			target = E25BE94A18E8D8D400276890 /* bhive */;
 			targetProxy = E25BE96B18E8D8D400276890 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -416,9 +416,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "com.busiestb.busyb/com.busiestb.busyb-Prefix.pch";
-				INFOPLIST_FILE = "com.busiestb.busyb/com.busiestb.busyb-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Sources/bhive-Prefix.pch";
+				INFOPLIST_FILE = "Sources/bhive-Info.plist";
+				PRODUCT_NAME = bhive;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -432,9 +432,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "com.busiestb.busyb/com.busiestb.busyb-Prefix.pch";
-				INFOPLIST_FILE = "com.busiestb.busyb/com.busiestb.busyb-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Sources/bhive-Prefix.pch";
+				INFOPLIST_FILE = "Sources/bhive-Info.plist";
+				PRODUCT_NAME = bhive;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -443,20 +443,20 @@
 		E25BE97B18E8D8D400276890 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/com.busiestb.busyb.app/com.busiestb.busyb";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/bhive.app/bhive";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "com.busiestb.busyb/com.busiestb.busyb-Prefix.pch";
+				GCC_PREFIX_HEADER = "Sources/bhive-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "com.busiestb.busybTests/com.busiestb.busybTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "TestSources/bhiveTests-Info.plist";
+				PRODUCT_NAME = bhiveTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -465,16 +465,16 @@
 		E25BE97C18E8D8D400276890 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/com.busiestb.busyb.app/com.busiestb.busyb";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/bhive.app/bhive";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "com.busiestb.busyb/com.busiestb.busyb-Prefix.pch";
-				INFOPLIST_FILE = "com.busiestb.busybTests/com.busiestb.busybTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "Sources/bhive-Prefix.pch";
+				INFOPLIST_FILE = "TestSources/bhiveTests-Info.plist";
+				PRODUCT_NAME = bhiveTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -483,7 +483,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E25BE94618E8D8D400276890 /* Build configuration list for PBXProject "com.busiestb.busyb" */ = {
+		E25BE94618E8D8D400276890 /* Build configuration list for PBXProject "bhive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E25BE97518E8D8D400276890 /* Debug */,
@@ -492,7 +492,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E25BE97718E8D8D400276890 /* Build configuration list for PBXNativeTarget "com.busiestb.busyb" */ = {
+		E25BE97718E8D8D400276890 /* Build configuration list for PBXNativeTarget "bhive" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E25BE97818E8D8D400276890 /* Debug */,
@@ -501,7 +501,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E25BE97A18E8D8D400276890 /* Build configuration list for PBXNativeTarget "com.busiestb.busybTests" */ = {
+		E25BE97A18E8D8D400276890 /* Build configuration list for PBXNativeTarget "bhiveTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E25BE97B18E8D8D400276890 /* Debug */,

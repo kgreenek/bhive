@@ -1,6 +1,6 @@
 //
 //  BBHexagonEntity.h
-//  com.busiestb.busyb
+//  com.hexkvlt.bhive
 //
 //  Created by Kevin Greene on 5/4/14.
 //  Copyright (c) 2014 Kevin Greene. All rights reserved.

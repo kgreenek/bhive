@@ -1,6 +1,6 @@
 //
 //  UIView+ColorOfPoint.m
-//  com.busiestb.busyb
+//  com.hexkvlt.bhive
 //
 //  Created by Kevin Greene on 5/13/14.
 //  Copyright (c) 2014 Kevin Greene. All rights reserved.
