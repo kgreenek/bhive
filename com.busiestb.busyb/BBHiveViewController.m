@@ -34,6 +34,7 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   BBHiveLayout *_hiveLayout;
   NSManagedObjectContext *_managedObjectContext;
   CGSize _keyboardSize;
+  UIPanGestureRecognizer *_activePanGestureRecognizer;
 }
 
 - (instancetype)init {
@@ -203,23 +204,33 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   if (_activeCellPath) {
     return;
   }
-  if (recognizer.state == UIGestureRecognizerStateEnded) {
-    [self panningDidEndWithRecognizer:recognizer];
-    return;
+  switch (recognizer.state) {
+    case UIGestureRecognizerStateBegan:
+      [self panningDidBeginWithRecognizer:recognizer];
+      // Fall through.
+    case UIGestureRecognizerStateChanged:
+      _panningCell.center = [recognizer locationInView:recognizer.view.superview];
+      break;
+    case UIGestureRecognizerStateCancelled:
+    case UIGestureRecognizerStateEnded:
+      [self panningDidEndWithRecognizer:recognizer];
+      break;
+    case UIGestureRecognizerStatePossible:
+    case UIGestureRecognizerStateFailed:
+      break;
   }
-  if (recognizer.state == UIGestureRecognizerStateBegan) {
-    if (_panningCell) {
-      // This can happen if the user it trying to drag multiple hexagons at the same time.
-      recognizer.enabled = NO;
-      recognizer.enabled = YES;
-      return;
-    }
-    [self panningDidBeginWithRecognizer:recognizer];
-  }
-  _panningCell.center = [recognizer locationInView:recognizer.view.superview];
 }
 
 - (void)panningDidBeginWithRecognizer:(UIPanGestureRecognizer *)recognizer {
+  if (_activePanGestureRecognizer) {
+    // This can happen if the user it trying to drag multiple hexagons at the same time.
+    UIPanGestureRecognizer *oldActiveRecognizer = _activePanGestureRecognizer;
+    _activePanGestureRecognizer = recognizer;
+    oldActiveRecognizer.enabled = NO;
+    oldActiveRecognizer.enabled = YES;
+    return;
+  }
+  _activePanGestureRecognizer = recognizer;
   _panningCell = [[BBHiveCell alloc] init];
   BBHexagon *hexagon = [(BBHiveCell *)recognizer.view hexagon];
   if (hexagon.type == kBBHexagonTypeCell) {
@@ -244,6 +255,16 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 }
 
 - (void)panningDidEndWithRecognizer:(UIPanGestureRecognizer *)recognizer {
+  if (recognizer != _activePanGestureRecognizer) {
+    // This can happen when the user tried to pan multiple hexagons simultaneously using multiple
+    // fingers.
+    return;
+  }
+  _activePanGestureRecognizer = nil;
+  if (!_panningCell) {
+    NSLog(@"WARN: Panning cell is already nil");
+    return;
+  }
   CGPoint location = [recognizer locationInView:recognizer.view.superview];
   CGPoint hexCoords = [_hiveLayout nearestHexCoordsFromScreenCoords:location];
   CGSize hexagonSize = [_panningCell sizeThatFits:CGSizeZero];
