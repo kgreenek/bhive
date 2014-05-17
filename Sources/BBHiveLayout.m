@@ -38,8 +38,8 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   self = [super init];
   if (self) {
     _delegate = delegate;
-    _hexagonPadding = (activeCellIndexPath == nil)
-        ? kDefaultHexagonPadding : kCellActiveHexagonPadding;
+    _hexagonPadding = (activeCellIndexPath == nil) ?
+        kDefaultHexagonPadding : kCellActiveHexagonPadding;
     _activeCellIndexPath = activeCellIndexPath;
     _keyboardSize = keyboardSize;
   }
@@ -194,12 +194,12 @@ static const CGFloat kCellActiveHexagonPadding = 120;
 }
 
 - (CGPoint)positionForHexagonWithHexCoords:(CGPoint)hexCoords {
-  CGFloat x = ((_hexagonPadding + kHexagonWidth) * hexCoords.x)
-      + (hexCoords.y * kHexagonWidth / 2)
-      + (hexCoords.y * _hexagonPadding / 2)
-      + self.collectionView.bounds.size.width / 2 - kHexagonWidth / 2;
-  CGFloat y = (kHexagonHeight - kHexagonPointHeight + _hexagonPadding) * hexCoords.y
-      + self.collectionView.bounds.size.height / 2 - kHexagonHeight / 2;
+  CGFloat x = ((_hexagonPadding + kHexagonWidth) * hexCoords.x) +
+      (hexCoords.y * kHexagonWidth / 2) +
+      (hexCoords.y * _hexagonPadding / 2) +
+      self.collectionView.bounds.size.width / 2 - kHexagonWidth / 2;
+  CGFloat y = (kHexagonHeight - kHexagonPointHeight + _hexagonPadding) * hexCoords.y +
+      self.collectionView.bounds.size.height / 2 - kHexagonHeight / 2;
   return CGPointMake(x, y);
 }
 
@@ -209,9 +209,9 @@ static const CGFloat kCellActiveHexagonPadding = 120;
   }
   CGPoint hexCoords =
       [_delegate hexCoordinatesForItemAtIndexPath:_activeCellIndexPath];
-  CGFloat x = ((_hexagonPadding + kHexagonWidth) * hexCoords.x)
-      + (hexCoords.y * kHexagonWidth / 2)
-      + (hexCoords.y * _hexagonPadding / 2);
+  CGFloat x = ((_hexagonPadding + kHexagonWidth) * hexCoords.x) +
+      (hexCoords.y * kHexagonWidth / 2) +
+      (hexCoords.y * _hexagonPadding / 2);
   CGFloat y = (kHexagonHeight - kHexagonPointHeight + _hexagonPadding) * hexCoords.y;
   return CGPointMake(-x, -y);
 }
