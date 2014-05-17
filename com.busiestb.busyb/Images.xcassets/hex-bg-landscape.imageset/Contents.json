@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "background-ipad-h.png"
+      "filename" : "hex-bg-ipad-landscape.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "background-ipad-h@2x.png"
+      "filename" : "hex-bg-ipad-landscape@2x.png"
     }
   ],
   "info" : {

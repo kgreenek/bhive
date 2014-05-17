@@ -72,7 +72,13 @@ static NSString * const kHexagonEntityName = @"Hexagon";
           forCellWithReuseIdentifier:kHiveCellIdentifier];
   _hiveCollectionView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-  [self setBackgoundView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]]];
+  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
+    [self setBackgoundView:
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-landscape"]]];
+  } else {
+    [self setBackgoundView:
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg"]]];
+  }
   self.view = _hiveCollectionView;
 }
 
@@ -85,13 +91,12 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                 duration:(NSTimeInterval)duration {
-  // We only allow rotation on iPad, so it's ok to just use the iPad image assets here.
   if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
     [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg-landscape"]]];
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-landscape"]]];
   } else {
     [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hexa-bg"]]];
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg"]]];
   }
 }
 

@@ -3,28 +3,28 @@
     {
       "idiom" : "iphone",
       "scale" : "1x",
-      "filename" : "background-iphone3.png"
+      "filename" : "hex-bg.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "background-iphone4.png"
+      "filename" : "hex-bg@2x.png"
     },
     {
       "idiom" : "iphone",
-      "filename" : "background-iphone5.png",
+      "filename" : "hex-bg-568h@2x.png",
       "subtype" : "retina4",
       "scale" : "2x"
     },
     {
       "idiom" : "ipad",
       "scale" : "1x",
-      "filename" : "background-ipad.png"
+      "filename" : "hex-bg-ipad-portrait.png"
     },
     {
       "idiom" : "ipad",
       "scale" : "2x",
-      "filename" : "background-ipad-retina.png"
+      "filename" : "hex-bg-ipad-portrait@2x.png"
     }
   ],
   "info" : {

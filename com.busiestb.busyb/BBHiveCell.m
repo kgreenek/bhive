@@ -28,7 +28,6 @@ static const CGFloat kHexagonHeight = 55;
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     _trashHidden = YES;
     _editBoxBackground = [[UIView alloc] init];
     _editBoxBackground.layer.cornerRadius = 8;
@@ -127,6 +126,7 @@ static const CGFloat kHexagonHeight = 55;
 - (void)setTrashHidden:(BOOL)trashHidden {
   _trashHidden = trashHidden;
   _trashView.hidden = _trashHidden;
+  self.backgroundView.hidden = !_trashHidden;
 }
 
 - (void)update {
