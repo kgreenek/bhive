@@ -31,8 +31,7 @@ static const CGFloat kHexagonHeight = 55;
     _trashHidden = YES;
     _editBoxBackground = [[UIView alloc] init];
     _editBoxBackground.layer.cornerRadius = 8;
-    _editBoxBackground.backgroundColor =
-        [UIColor colorWithRed:41 / 255 green:41 / 255 blue:63 / 255 alpha:0.3];
+    _editBoxBackground.backgroundColor = [UIColor colorWithWhite:1 alpha:0.3];
     _editBoxBackground.alpha = 0;
     [self addSubview:_editBoxBackground];
 
@@ -40,14 +39,14 @@ static const CGFloat kHexagonHeight = 55;
     _editBox.keyboardAppearance = UIKeyboardAppearanceDark;
     _editBox.backgroundColor = [UIColor clearColor];
     _editBox.font = [UIFont fontWithName:@"GillSans" size:20];
-    _editBox.textColor = [UIColor whiteColor];
+    _editBox.textColor = [UIColor colorWithRed:23 / 255 green:23 / 255 blue:23 / 255 alpha:1];
     _editBox.alpha = 0;
     [self addSubview:_editBox];
 
     _textLabel = [[UILabel alloc] init];
     _textLabel.alpha = 0;
     _textLabel.font = [UIFont fontWithName:@"GillSans-Bold" size:20];
-    _textLabel.textColor = [UIColor whiteColor];
+    _textLabel.textColor = [UIColor colorWithRed:23 / 255 green:23 / 255 blue:23 / 255 alpha:1];
     _textLabel.numberOfLines = 4;
     _textLabel.textAlignment = NSTextAlignmentCenter;
     [self addSubview:_textLabel];
