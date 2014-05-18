@@ -229,6 +229,9 @@ static NSString * const kHexagonEntityName = @"Hexagon";
     oldActiveRecognizer.enabled = NO;
     oldActiveRecognizer.enabled = YES;
     return;
+  } else if (_panningCell) {
+    NSLog(@"WARN: Panning cell is non-nil");
+    return;
   }
   _activePanGestureRecognizer = recognizer;
   _panningCell = [[BBHiveCell alloc] init];
@@ -273,22 +276,23 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   BBHexagon *overlappingHexagon = [self hexagonAtHexCoords:hexCoords];
   if (overlappingHexagon != nil || offscreen) {
     if (_panningCellIsNew || overlappingHexagon.type == kBBHexagonTypeCenter) {
+      BBHiveCell *panningCell = _panningCell;
+      _panningCell = nil;
       // Animate the cell back to the center to communicate that it couldn't be created.
       [UIView animateWithDuration:0.15
           animations:^{
-            _panningCell.frame =
+            panningCell.frame =
                 CGRectMake(_hiveCollectionView.bounds.size.width / 2 - hexagonSize.width / 2,
                            _hiveCollectionView.bounds.size.height / 2 - hexagonSize.height / 2,
                            hexagonSize.width,
                            hexagonSize.height);
-            _panningCell.alpha = 0.4;
+            panningCell.alpha = 0.4;
           }
           completion:^(BOOL finished) {
-            [_panningCell removeFromSuperview];
-            _panningCell = nil;
-            [self centerHiveCell].trashHidden = YES;
+            [panningCell removeFromSuperview];
+            [self centerHiveCell].trashHidden = _activePanGestureRecognizer == nil;
           }];
-      [_managedObjectContext deleteObject:_panningCell.hexagon.entity];
+      [_managedObjectContext deleteObject:panningCell.hexagon.entity];
       [_managedObjectContext save:NULL];
       return;
     }
