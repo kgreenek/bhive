@@ -69,17 +69,12 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   _hiveCollectionView.scrollEnabled = NO;
   _hiveCollectionView.dataSource = self;
   _hiveCollectionView.delegate = self;
-  [_hiveCollectionView registerClass:[BBHiveCell class]
-          forCellWithReuseIdentifier:kHiveCellIdentifier];
+  [_hiveCollectionView registerClass:
+      [BBHiveCell class] forCellWithReuseIdentifier:kHiveCellIdentifier];
   _hiveCollectionView.autoresizingMask =
       UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-  if (UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation])) {
-    [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-landscape"]]];
-  } else {
-    [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg"]]];
-  }
+  [self updateBackgroundImageWithOrientation:
+      [[UIApplication sharedApplication] statusBarOrientation]];
   self.view = _hiveCollectionView;
 }
 
@@ -92,13 +87,7 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
                                 duration:(NSTimeInterval)duration {
-  if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-    [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-landscape"]]];
-  } else {
-    [self setBackgoundView:
-        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg"]]];
-  }
+  [self updateBackgroundImageWithOrientation:toInterfaceOrientation];
 }
 
 #pragma mark UICollectionViewDataSource
@@ -331,7 +320,8 @@ static NSString * const kHexagonEntityName = @"Hexagon";
 }
 
 - (void)setupManagedObjectContext {
-  NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+  NSManagedObjectModel *model =
+      [NSManagedObjectModel mergedModelFromBundles:@[ [NSBundle bundleForClass:self.class] ]];
   NSURL *url = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory
                                                       inDomains:NSUserDomainMask][0];
   url = [url URLByAppendingPathComponent:@"hexagons.sqlite"];
@@ -409,6 +399,25 @@ static NSString * const kHexagonEntityName = @"Hexagon";
   _hiveCollectionView.backgroundView = backgroundView;
   _hiveCollectionView.backgroundView.userInteractionEnabled = YES;
   [_hiveCollectionView.backgroundView addGestureRecognizer:_backgroundTapRecognizer];
+}
+
+- (void)updateBackgroundImageWithOrientation:(UIInterfaceOrientation)orientation {
+  if (UIInterfaceOrientationIsLandscape(orientation)) {
+    [self setBackgoundView:
+        [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-landscape"]]];
+  } else {
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    if (width == 375) {
+      // For the iPhone 6, there is no standard way to support the right screen size (the @3x asset
+      // gets stretched for the iPhone 6). So we have to hard-code a specific value just for the 6.
+      // All other screen sizes work with the regular hex-bg image set.
+      [self setBackgoundView:
+          [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg-375w"]]];
+    } else {
+      [self setBackgoundView:
+          [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"hex-bg"]]];
+    }
+  }
 }
 
 + (BBHexagonColor)randomHexagonColor {

@@ -3,12 +3,16 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "hex-bg-ipad-landscape.png"
+      "filename" : "bg-1024x768.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "hex-bg-ipad-landscape@2x.png"
+      "filename" : "bg-2048x1536.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

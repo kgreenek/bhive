@@ -78,8 +78,8 @@ static const CGFloat kHexagonHeight = 55;
   CGSize size =
       [_textLabel sizeThatFits:CGSizeMake(self.bounds.size.width - 2 * kTextBoxHorizontalPadding,
                                           self.bounds.size.height / 2)];
-  _textLabel.frame = CGRectMake((self.bounds.size.width  - size.width) / 2,
-                                (self.bounds.size.height  - size.height) / 2,
+  _textLabel.frame = CGRectMake((self.bounds.size.width - size.width) / 2,
+                                (self.bounds.size.height - size.height) / 2,
                                 size.width,
                                 size.height);
   _trashView.frame = self.bounds;
@@ -100,6 +100,9 @@ static const CGFloat kHexagonHeight = 55;
     self.editing = NO;
   }
   _textLabel.alpha = active && !_editing ? 1 : 0;
+  // We need to disable the pan recognizer, because otherwise it interferes with the gestures on the
+  // UITextView. For example, long press for copy/paste doesn't happen.
+  _panRecognizer.enabled = !active;
 }
 
 - (void)setEditing:(BOOL)editing {
